@@ -5,15 +5,19 @@
 ## Connection and wiring
 
 | Pin | usage |
-| ------ | ------ |
-|        |        |
-|        |        |
+
+|       |        |
+|:-----:|:------:|
+| Pin 1 |   5V   |
+| Pin 2 |  Gnd   |
+| Pin 3 |    /   |
+| Pin 4 |   /    | 
+| Pin 5 |   /    |
+| Pin 6 |   /   |
+| Pin 7 | RS485-A |
+| Pin 8 | RS485-B |
 
 
-|-|-|
-|||
-|Pin 1|
-|-|-|
 
 ## Protocol version and documentation
 
