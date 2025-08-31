@@ -1,0 +1,24 @@
+Fault code Fault name    Description                                            Whether it affects the output or not
+【01】   BatVoltLow      Battery undervoltage alarm                             Yes    
+【02】   BatOverCurrSw   Battery discharge average current overcurrent software Yes    
+【03】   BatOpen         Battery not-connected alarm                            Yes    
+【04】   BatLowEod       Battery undervoltage stop discharge alarm              Yes    
+【05】   BatOverCurrHw   Battery overcurrent hardware protection                Yes    
+【06】   BatOverVolt     Charging overvoltage protection                        Yes    
+【07】   BusOverVoltHw   Bus overvoltage hardware protection                    Yes    
+【08】   BusOverVoltSw   Bus overvoltage software protection                    Yes    
+【09】   PvVoltHigh      PV overvoltage protection                              No     
+【10】   PvBuckOCSw      Buck overcurrent software protection                   No     
+【11】   PvBuckOCHw      Buck overcurrent hardware protection                   No     
+【12】   bLineLoss       Mains power down                                       No     
+【13】   OverloadBypass  Bypass overload protection                             Yes    
+【14】   OverloadInverterInverter overload protection                           Yes    
+【15】   AcOverCurrHw    Inverter overcurrent hardware protection               Yes    
+【17】   InvShort        Inverter short circuit protection                      Yes    
+【19】   OverTemperMppt  Buck heat sink over temperature protection             No     
+【20】   OverTemperInv   Inverter heat sink over temperature protection         Yes    
+【21】   FanFail         Fan failure                                            Yes    
+【22】   EEPROM          Memory failure                                         Yes    
+【23】   ModelNumErr     Model setting error                                    Yes    
+【26】   RlyShort        Inverted AC Output Backfills to Bypass AC Input        Yes    
+【29】   BusShort        Internal battery boost circuit failure                 Yes    

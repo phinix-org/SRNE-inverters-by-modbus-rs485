@@ -1,0 +1,164 @@
+select:
+#    E425     1  IsoCheckEn                RW  1                  %d           Unsigned          0        1      1
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: IsoCheckEn
+    name: "${name} IsoCheckEn"
+    address: 0xE425
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E427     1  GridFuncEnable            RW  1                  %d           Unsigned          0    65535      0
+#    E428     1  GridStandUserMode         RW  1                  %d           Unsigned          0        1      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: GridStandUserMode
+    name: "${name} GridStandUserMode"
+    address: 0xE428
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E42A     1  BattForGridPowerEn        RW  1                  %d           Unsigned          0        3      0  0: Battery is not discharged.
+#                                                                                                                   1: Battery discharges to UPS loads.
+#                                                                                                                   2: Battery discharges to home loads.
+#                                                                                                                   3: Grid connection
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BattForGridPowerEn
+    name: "${name} BattForGridPowerEn"
+    address: 0xE42A
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "Battery is not discharged": 0
+      "Battery discharges to UPS loads": 1
+      "Battery discharges to home loads": 2
+      "Grid connection": 3
+
+#    E42E     1  WattPFCurveEnable         RW  1                  %d           Unsigned          0        1      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: WattPFCurveEnable
+    name: "${name} WattPFCurveEnable"
+    address: 0xE42E
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E42F     1  HLVRTEnable               RW  1                  %d           Unsigned          0        1      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: HLVRTEnable
+    name: "${name} HLVRTEnable"
+    address: 0xE42F
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E430     1  Cei021AutoTestStart       RW  1                  %d           Unsigned          0        1      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: Cei021AutoTestStart
+    name: "${name} Cei021AutoTestStart"
+    address: 0xE430
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E431     1  AfciEnable                RW  1                  %d           Unsigned          0        1      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: AfciEnable
+    name: "${name} AfciEnable"
+    address: 0xE431
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E438     1  CT auto detect enable     RW  1                  %d           Unsigned          0        1      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: CTautoDetectEnable
+    name: "${name} CTautoDetectEnable"
+    address: 0xE438
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E439     1  CT manual setting         RW  1                  %d           Unsigned          0        2      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: CTmanualSetting
+    name: "${name} CTmanualSetting"
+    address: 0xE439
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "CT set 0": 0
+      "CT set 1": 1
+      "CT set 2": 2
+
+#    E43B     1  DRMS_Enable               RW  1                  %d           Unsigned          0        1      0  0:disable 1:enable
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: DRMS_Enable
+    name: "${name} DRMS_Enable"
+    address: 0xE43B
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E43E     1  SmartMeterEn              RW  1                  %d           Unsigned                             0:disable 1:Single phase meter 2:Three phase meter
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: SmartMeterEn
+    name: "${name} SmartMeterEn"
+    address: 0xE43E
+    value_type: U_WORD
+    # icon: 
+    optionsmap:
+      "disabled": 0
+      "Single phase meter": 1
+      "Three phase meter": 2
+
+#    E442     1  GridAvgOvEn               RW  1                  %d           Unsigned          0        1      0  0: Disabled, 1: Enabled
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: GridAvgOvEn
+  #   name: "${name} GridAvgOvEn"
+  #   address: 0xE442
+  #   value_type: U_WORD
+  #   # icon: 
+  #   optionsmap:
+  #     "disabled": 0
+  #     "enabled": 1
+
+#    E445     1  GridRocofEn               RW  1                  %d           Unsigned          0        1      0  0: Disabled, 1: Enabled
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: GridRocofEn
+  #   name: "${name} GridRocofEn"
+  #   address: 0xE445
+  #   value_type: U_WORD
+  #   # icon: 
+  #   optionsmap:
+  #     "disabled": 0
+  #     "enabled": 1

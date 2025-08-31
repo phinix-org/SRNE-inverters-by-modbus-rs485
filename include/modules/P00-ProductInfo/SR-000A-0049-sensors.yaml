@@ -1,0 +1,487 @@
+# P00  Product  Information  Area
+#    000A     1  MinorVersion              R   1          -       %d           Unsigned                             Reserved
+# #  000B     1  MachType                  R   1          -       %d           Unsigned                             Product type
+#                                                                                                                   00 (domestic controller)
+#                                                                                                                   01 (controller for street light)
+#                                                                                                                   03 (grid-connected inverter)
+#                                                                                                                   04 (all-in-one solar charger inverter)
+#                                                                                                                   05 (power frequency off-grid)
+#    000C     8  ProductInfoReversed01     R   1          -       %s           Unsigned                             Reserved
+#    0014     2  Afci firmware version     R   1          -       %d           Unsigned                             0x0012: AFCI firmware version number 
+#                                                                                                                   0x0013: AFCI algorithm version number 
+#    0014     2  SoftWareVersion           R   1          -       %d           Unsigned                             0×0014: APP version (e.g.,100 for V1.00)
+#                                                                                                                   0×0015: BOOTLOADER version (e.g.,100 for V1.00), reserved
+#    0016     2  HardWareVersion           R   1          -       %d           Unsigned                             0×0016: control panel version (e.g.,100 for V1.00)
+#                                                                                                                   0×0017: power amplifier board version (e.g.,100 for V1.00), reserved
+# #  0018     2  ProductInfoReversed02     R   1          -       %x           Unsigned                             Reserved
+#    001A     1  Rs485Addr                 R   1          -       %d           Unsigned                             Rs485 address, which is read-only
+#    001B     1  MachModelNum2             R   1          -       %d           Unsigned
+#    001C     2  RS485Version              R   1          -       %x           Unsigned                             0×001C: protocol version (e.g.,100 for V1.00)
+#                                                                                                                   0×001D: reserved
+# #  001E     2  ManufactureDate           R   1          -       %x           Unsigned                             0×001E: high byte: year, low byte: month
+#                                                                                                                   0×001F: high byte: day, low byte: hour
+# #  0020     1  ProductAreaCode           R   1          -       %x           Unsigned                             0: Shenzhen
+#                                                                                                                   1: Dongguan
+#    0021    20  CpuBuidTime               R   1          -       %s           Unsigned                             String format, with the low bytes of each register valid and the high bytes invalid
+#    0035    20  ProductSNStr              R   1          -       %s           Unsigned                             String format, with the low bytes of each register valid and the high bytes invalid
+# #  0049     1  ProductInfoReversed03     R   1          -       %x           Unsigned                                                                                                                                                      保留
+#    004A    20  Cpu2BuidTime              R   1          -       %s           Unsigned                             String format, with the low bytes of each register valid and the high bytes invalid
+
+
+sensor:
+# #    000A     1  MinorVersion              R   1          -       %d           Unsigned                             Reserved
+# ######### usuported ? - keep some value
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     id: MinorVersion
+#     name: "${name} MinorVersion"
+#     address: 0x000A
+#     register_type: holding
+#     value_type: U_WORD
+#     accuracy_decimals: 0
+#     device_class: ""
+#     state_class: ""
+#     entity_category: ""
+
+#    0012     2  Afci firmware version     R   1          -       %d           Unsigned                             0x0012: AFCI firmware version number 
+#                                                                                                                   0x0013: AFCI algorithm version number 
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: AfciFirmwareVersion
+    name: "${name} Afci firmware version"
+    address: 0x0012
+    offset: 0x00
+    register_type: holding
+    value_type: U_WORD
+    # bitmask: 0x00FF
+    # register_count: 0x02
+    # response_size: 0x04
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+    force_new_range: true
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: AfciAlgorithmVersion
+    name: "${name} AFCI algorithm version"
+    # address: 0x0012
+    address: 0x0013
+    # offset: 0x01
+    register_type: holding
+    value_type: U_WORD
+    # bitmask: 0xFF00
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+    force_new_range: true
+
+#    0014     2  SoftWareVersion           R   1          -       %d           Unsigned                             0×0014: APP version (e.g.,100 for V1.00)
+#                                                                                                                   0×0015: BOOTLOADER version (e.g.,100 for V1.00), reserved
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: SoftWareVersionAppL
+    # name: "${name} SoftWareVersion APP L"
+    address: 0x0014
+    offset: 0x00
+    register_type: holding
+    # value_type: U_WORD
+    bitmask: 0x00FF
+    register_count: 0x04
+    response_size: 0x08
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+    force_new_range: true
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: SoftWareVersionAppH
+    # name: "${name} SoftWareVersion APP H"
+    address: 0x0014
+    offset: 0x00
+    register_type: holding
+    # value_type: U_WORD
+    bitmask: 0xFF00
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+    # force_new_range: true
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: SoftWareVersionBootL
+    # name: "${name} SoftWareVersion BOOTLOADER L"
+    address: 0x0014
+    offset: 0x02
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: SoftWareVersionBootH
+    # name: "${name} SoftWareVersion BOOTLOADER H"
+    address: 0x0014
+    offset: 0x02
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+
+#    0016     2  HardWareVersion           R   1          -       %d           Unsigned                             0×0016: control panel version (e.g.,100 for V1.00)
+#                                                                                                                   0×0017: power amplifier board version (e.g.,100 for V1.00), reserved
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: HardWareVersionCPL
+    # name: "${name} HardWareVersion control panel L"
+    # address: 0x0016
+    address: 0x0014
+    offset: 0x04
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    # register_count: 0x02
+    # response_size: 0x04
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+    # force_new_range: true
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: HardWareVersionCPH
+    # name: "${name} HardWareVersion control panel H"
+    # address: 0x0016
+    address: 0x0014
+    offset: 0x04
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    register_count: 0x02
+    response_size: 0x04
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: HardWareVersionPAL
+    # name: "${name} HardWareVersion power amplifier L"
+    # address: 0x0016
+    address: 0x0014
+    offset: 0x06
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: HardWareVersionPAH
+    # name: "${name} HardWareVersion power amplifier H"
+    # address: 0x0016
+    address: 0x0014
+    offset: 0x06
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+
+#    001A     1  Rs485Addr                 R   1          -       %d           Unsigned                             Rs485 address, which is read-only
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: Rs485Addr
+    name: "${name} Rs485Addr"
+    address: 0x001A
+    register_type: holding
+    value_type: U_WORD
+    # bitmask: 0x00FF
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+    force_new_range: true
+
+#    001B     1  MachModelNum2             R   1          -       %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # id:
+    name: "${name} MachModelNum2"
+    address: 0x001B
+    register_type: holding
+    value_type: U_WORD
+    # bitmask: 0xFF00
+    accuracy_decimals: 0
+    device_class: ""
+    state_class: ""
+    entity_category: ""
+    force_new_range: true
+
+# #  001E     2  ManufactureDate           R   1          -       %x           Unsigned                             0×001E: high byte: year, low byte: month
+#                                                                                                                   0×001F: high byte: day, low byte: hour
+# ######### usuported ?
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ManufactureDateMonth
+  #   name: "${name} ManufactureDateMonth"
+  #   address: 0x001E
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   bitmask: 0x00FF
+  #   # register_count: 0x02
+  #   # response_size: 0x04
+  #   accuracy_decimals: 0
+  #   device_class: ""
+  #   state_class: ""
+  #   entity_category: ""
+  #   # force_new_range: true
+  #
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ManufactureDateYear
+  #   name: "${name} ManufactureDateYear"
+  #   address: 0x001E
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   bitmask: 0xFF00
+  #   accuracy_decimals: 0
+  #   device_class: ""
+  #   state_class: ""
+  #   entity_category: ""
+  #   # force_new_range: true
+  #
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ManufactureDateHour
+  #   name: "${name} ManufactureDateHour"
+  #   address: 0x001F
+  #   # address: 0x001E
+  #   # offset: 0x02
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   bitmask: 0x00FF
+  #   accuracy_decimals: 0
+  #   device_class: ""
+  #   state_class: ""
+  #   entity_category: ""
+  #
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ManufactureDateDay
+  #   name: "${name} ManufactureDateDay"
+  #   address: 0x001F
+  #   # address: 0x001E
+  #   # offset: 0x02
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   bitmask: 0xFF00
+  #   accuracy_decimals: 0
+  #   device_class: ""
+  #   state_class: ""
+  #   entity_category: ""
+
+
+
+text_sensor:
+#    000A     1  MinorVersion              R   1          -       %d           Unsigned                             Reserved
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: MinorVersion
+    name: "${name} MinorVersion"
+    address: 0x000A
+    register_type: holding
+    # value_type: U_WORD
+    raw_encode: HEXBYTES
+
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     # id: MinorVersion
+#     name: "${name} MinorVersion L"
+#     address: 0x000A
+#     register_type: holding
+#     # value_type: U_WORD
+#     bitmask: 0x00FF
+#     raw_encode: HEXBYTES
+#
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     # id: MinorVersion
+#     name: "${name} MinorVersion H"
+#     address: 0x000A
+#     register_type: holding
+#     # value_type: U_WORD
+#     bitmask: 0xFF00
+#     raw_encode: HEXBYTES
+
+# #  000B     1  MachType                  R   1          -       %d           Unsigned                             Product type
+#                                                                                                                   00 (domestic controller)
+#                                                                                                                   01 (controller for street light)
+#                                                                                                                   03 (grid-connected inverter)
+#                                                                                                                   04 (all-in-one solar charger inverter)
+#                                                                                                                   05 (power frequency off-grid)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: MachType
+    name: "${name} MachType"
+    address: 0x000B
+    register_type: holding
+    raw_encode: HEXBYTES
+    lambda: |-
+      uint16_t value = modbus_controller::word_from_hex_str(x, 0);
+      switch (value) {
+        case 0: return std::string("Domestic Controller");
+        case 1: return std::string("Street light Controller");
+        case 3: return std::string("On-greed Inverter");
+        case 4: return std::string("Hybrid Inverter");
+        case 5: return std::string("Off-grid power frequency");
+        default: return std::string("Unknown");
+      }
+      return x;
+
+#    000C     8  ProductInfoReversed01     R   1          -       %s           Unsigned                             Reserved
+# ######### usuported ?
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   name: "${name} ProductInfoReversed01"
+  #   address: 0x000C
+  #   register_count: 8
+  #   response_size: 16
+  #   register_type: holding
+  #   force_new_range: true
+  #   # raw_encode: NONE
+  #   raw_encode: HEXBYTES
+
+# #  0018     2  ProductInfoReversed02     R   1          -       %x           Unsigned                             Reserved
+# ######### usuported ?
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   name: "${name} ProductInfoReversed02"
+  #   address: 0x0018
+  #   # register_count: 2
+  #   # response_size: 4
+  #   register_type: holding
+  #   force_new_range: true
+  #   # raw_encode: NONE
+  #   raw_encode: HEXBYTES
+
+
+#    001C     2  RS485Version              R   1          -       %x           Unsigned                             0×001C: protocol version (e.g.,100 for V1.00)
+#                                                                                                                   0×001D: reserved
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} RS485Version"
+    address: 0x001C
+    register_count: 2
+    response_size: 4
+    register_type: holding
+    force_new_range: true
+    # raw_encode: NONE
+    raw_encode: HEXBYTES
+
+# #  0020     1  ProductAreaCode           R   1          -       %x           Unsigned                             0: Shenzhen
+#                                                                                                                   1: Dongguan
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: ProductAreaCode
+    name: "${name} ProductAreaCode"
+    address: 0x0020
+    register_type: holding
+    raw_encode: HEXBYTES
+    force_new_range: true
+    lambda: |-
+      uint16_t value = modbus_controller::word_from_hex_str(x, 0);
+      switch (value) {
+        case 0: return std::string("Shenzhen");
+        case 1: return std::string("Dongguan");
+        default: return std::string("Unknown");
+      }
+      return x;
+
+#    0021    20  CpuBuidTime               R   1          -       %s           Unsigned                             String format, with the low bytes of each register valid and the high bytes invalid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} CpuBuidTime"
+    address: 0x0021
+    register_count: 20
+    response_size: 40
+    register_type: holding
+    force_new_range: true
+    # raw_encode: NONE
+    # raw_encode: HEXBYTES
+
+#    0035    20  ProductSNStr              R   1          -       %s           Unsigned                             String format, with the low bytes of each register valid and the high bytes invalid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} ProductSNStr"
+    address: 0x0035
+    register_count: 20
+    response_size: 40
+    register_type: holding
+    force_new_range: true
+    # raw_encode: NONE
+    # raw_encode: HEXBYTES
+
+# #  0049     1  ProductInfoReversed03     R   1          -       %x           Unsigned                                                                                                                                                      保留
+
+  - platform: template
+    name: "${name} SoftWareVersion"
+    lambda: |-
+      int SoftWareVersion1 = id(SoftWareVersionBootL).state;
+      int SoftWareVersion2 = id(SoftWareVersionAppH).state;
+      int SoftWareVersion3 = id(SoftWareVersionAppL).state;
+      return { (String(SoftWareVersion1) + "." + String(SoftWareVersion2) + "." + String(SoftWareVersion3)).c_str() };
+
+  - platform: template
+    name: "${name} HardWareVersion"
+    lambda: |-
+      int HardWareVersion1 = id(HardWareVersionPAL).state;
+      int HardWareVersion2 = id(HardWareVersionCPH).state;
+      int HardWareVersion3 = id(HardWareVersionCPL).state;
+      return { (String(HardWareVersion1) + "." + String(HardWareVersion2) + "." + String(HardWareVersion3)).c_str() };
+
+# #    004A    20  Cpu2BuidTime              R   1          -       %s           Unsigned                             String format, with the low bytes of each register valid and the high bytes invalid
+# Unsupported yet ?
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     name: "${name} Cpu2BuidTime"
+#     address: 0x004A
+#     register_count: 20
+#     response_size: 40
+#     register_type: holding
+#     force_new_range: true
+#     # raw_encode: NONE
+#     # raw_encode: HEXBYTES
+
+
+# #  001E     2  ManufactureDate           R   1          -       %x           Unsigned                             0×001E: high byte: year, low byte: month
+#                                                                                                                   0×001F: high byte: day, low byte: hour
+# ######### usuported ?
+  # - platform: template
+  #   name: "${name} ManufactureDate"
+  #   lambda: |-
+  #     int ManufactureDateYearI = id(ManufactureDateYear).state;
+  #     int ManufactureDateMonthI = id(ManufactureDateMonth).state;
+  #     int ManufactureDateDayI = id(ManufactureDateDay).state;
+  #     int ManufactureDateHourI = id(ManufactureDateHour).state;
+  #     return { (String(ManufactureDateYearI) + "-" + String(ManufactureDateMonthI) + "-" + String(ManufactureDateDayI) + "." + String(ManufactureDateHourI)).c_str() };
+

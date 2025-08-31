@@ -1,0 +1,656 @@
+# P10 Fault Record
+#    F800    16  FaultHistoryRecord00      RW  1                  %d           Unsigned                             Each fault record occupies 16 addresses, storing a total  of 16 fault records.
+#    F810    16  FaultHistoryRecord01      RW  1                  %d           Unsigned                             Internal data format definition for fault record: (defined  by internal offset address)
+#    F820    16  FaultHistoryRecord02      RW  1                  %d           Unsigned                             0x00: Fault code; see the instruction manual for specific definition of fault code.
+#    F830    16  FaultHistoryRecord03      RW  1                  %d           Unsigned                                   If the fault code is 0, it  means that the fault record is invalid.
+#    F840    16  FaultHistoryRecord04      RW  1                  %d           Unsigned                             0x01−0x03: The time when the fault code occurs (there  is no time for generation-1 machines).
+#    F850    16  FaultHistoryRecord05      RW  1                  %d           Unsigned                             0x04−0x0F: Data packets captured when a fault occurs,  with a total of 12 data.
+#    F860    16  FaultHistoryRecord06      RW  1                  %d           Unsigned
+#    F870    16  FaultHistoryRecord07      RW  1                  %d           Unsigned
+#    F880    16  FaultHistoryRecord08      RW  1                  %d           Unsigned
+#    F890    16  FaultHistoryRecord09      RW  1                  %d           Unsigned
+#    F8A0    16  FaultHistoryRecord10      RW  1                  %d           Unsigned
+#    F8B0    16  FaultHistoryRecord11      RW  1                  %d           Unsigned
+#    F8C0    16  FaultHistoryRecord12      RW  1                  %d           Unsigned
+#    F8D0    16  FaultHistoryRecord13      RW  1                  %d           Unsigned
+#    F8E0    16  FaultHistoryRecord14      RW  1                  %d           Unsigned
+#    F8F0    16  FaultHistoryRecord15      RW  1                  %d           Unsigned
+#    F900    16  FaultHistoryRecord16      RW  1                  %d           Unsigned
+#    F910    16  FaultHistoryRecord17      RW  1                  %d           Unsigned
+#    F920    16  FaultHistoryRecord18      RW  1                  %d           Unsigned
+#    F930    16  FaultHistoryRecord19      RW  1                  %d           Unsigned
+#    F940    16  FaultHistoryRecord20      RW  1                  %d           Unsigned
+#    F950    16  FaultHistoryRecord21      RW  1                  %d           Unsigned
+#    F960    16  FaultHistoryRecord22      RW  1                  %d           Unsigned
+#    F970    16  FaultHistoryRecord23      RW  1                  %d           Unsigned
+#    F980    16  FaultHistoryRecord24      RW  1                  %d           Unsigned
+#    F990    16  FaultHistoryRecord25      RW  1                  %d           Unsigned
+#    F9A0    16  FaultHistoryRecord26      RW  1                  %d           Unsigned
+#    F9B0    16  FaultHistoryRecord27      RW  1                  %d           Unsigned
+#    F9C0    16  FaultHistoryRecord28      RW  1                  %d           Unsigned
+#    F9D0    16  FaultHistoryRecord29      RW  1                  %d           Unsigned
+#    F9E0    16  FaultHistoryRecord30      RW  1                  %d           Unsigned
+#    F9F0    16  FaultHistoryRecord31      RW  1                  %d           Unsigned
+#    FA00    16  AutoTestRecord            RW  1                  %d           Unsigned
+# #  FA10     1  RecordReserved0           R   1                  %d           Unsigned
+# #  FA11     1  RecordReserved1           R   1                  %d           Unsigned
+
+text_sensor:
+#    F800    16  FaultHistoryRecord00      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord00
+    # name: "${name} FaultHistoryRecord00"
+    address: 0xF800
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF800","%x",x);
+       return {};
+
+  - platform: template
+    # name: "${name} FaultHistoryRecord00Time"
+    name: "${name} FaultHistoryRecord00"
+    # update_interval: 60s
+  # device_class: timestamp
+    lambda: |-
+      std::string value = "Unknown";
+      int year = 2000 + id(FaultHistoryRecord00Year).state;
+      int month = id(FaultHistoryRecord00Month).state;
+      int day = id(FaultHistoryRecord00Day).state;
+      int hour = id(FaultHistoryRecord00Hour).state;
+      int minute = id(FaultHistoryRecord00Minute).state;
+      int second = id(FaultHistoryRecord00Second).state;
+      value = (day ? to_string(day) + "." : "") + (month ? to_string(month) + "." : "") + (year ? to_string(year) + " " : "") +
+              (day ? to_string(hour) + ":" : "") + (month ? to_string(minute) + ":" : "") + (year ? to_string(second) + "" : "") +
+              "\n HEX: " + id(FaultHistoryRecord00).state;
+      return value;
+
+#    F810    16  FaultHistoryRecord01      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord01
+    # name: "${name} FaultHistoryRecord01"
+    address: 0xF810
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF810","%x",x);
+       return {};
+
+  - platform: template
+    # name: "${name} FaultHistoryRecord01Time"
+    name: "${name} FaultHistoryRecord01"
+    # update_interval: 60s
+  # device_class: timestamp
+    lambda: |-
+      std::string value = "Unknown";
+      int year = 2000 + id(FaultHistoryRecord01Year).state;
+      int month = id(FaultHistoryRecord01Month).state;
+      int day = id(FaultHistoryRecord01Day).state;
+      int hour = id(FaultHistoryRecord01Hour).state;
+      int minute = id(FaultHistoryRecord01Minute).state;
+      int second = id(FaultHistoryRecord01Second).state;
+      value = (day ? to_string(day) + "." : "") + (month ? to_string(month) + "." : "") + (year ? to_string(year) + " " : "") +
+              (day ? to_string(hour) + ":" : "") + (month ? to_string(minute) + ":" : "") + (year ? to_string(second) + "" : "") +
+              "\n HEX: " + id(FaultHistoryRecord01).state;
+      return value;
+
+#    F820    16  FaultHistoryRecord02      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord02
+    # name: "${name} FaultHistoryRecord02"
+    address: 0xF820
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF820","%x",x);
+       return {};
+
+  - platform: template
+    # name: "${name} FaultHistoryRecord02Time"
+    name: "${name} FaultHistoryRecord02"
+    # update_interval: 60s
+  # device_class: timestamp
+    lambda: |-
+      std::string value = "Unknown";
+      int year = 2000 + id(FaultHistoryRecord02Year).state;
+      int month = id(FaultHistoryRecord02Month).state;
+      int day = id(FaultHistoryRecord02Day).state;
+      int hour = id(FaultHistoryRecord02Hour).state;
+      int minute = id(FaultHistoryRecord02Minute).state;
+      int second = id(FaultHistoryRecord02Second).state;
+      value = (day ? to_string(day) + "." : "") + (month ? to_string(month) + "." : "") + (year ? to_string(year) + " " : "") +
+              (day ? to_string(hour) + ":" : "") + (month ? to_string(minute) + ":" : "") + (year ? to_string(second) + "" : "") +
+              "\n HEX: " + id(FaultHistoryRecord02).state;
+      return value;
+
+#    F830    16  FaultHistoryRecord03      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord03
+    # name: "${name} FaultHistoryRecord03"
+    address: 0xF830
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF830","%x",x);
+       return {};
+
+  - platform: template
+    # name: "${name} FaultHistoryRecord03Time"
+    name: "${name} FaultHistoryRecord03"
+    # update_interval: 60s
+  # device_class: timestamp
+    lambda: |-
+      std::string value = "Unknown";
+      int year = 2000 + id(FaultHistoryRecord03Year).state;
+      int month = id(FaultHistoryRecord03Month).state;
+      int day = id(FaultHistoryRecord03Day).state;
+      int hour = id(FaultHistoryRecord03Hour).state;
+      int minute = id(FaultHistoryRecord03Minute).state;
+      int second = id(FaultHistoryRecord03Second).state;
+      value = (day ? to_string(day) + "." : "") + (month ? to_string(month) + "." : "") + (year ? to_string(year) + " " : "") +
+              (day ? to_string(hour) + ":" : "") + (month ? to_string(minute) + ":" : "") + (year ? to_string(second) + "" : "") +
+              "\n HEX: " + id(FaultHistoryRecord03).state;
+      return value;
+
+#    F840    16  FaultHistoryRecord04      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord04
+    # name: "${name} FaultHistoryRecord04"
+    address: 0xF840
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF840","%x",x);
+       return {};
+
+  - platform: template
+    # name: "${name} FaultHistoryRecord04Time"
+    name: "${name} FaultHistoryRecord04"
+    # update_interval: 60s
+  # device_class: timestamp
+    lambda: |-
+      std::string value = "Unknown";
+      int year = 2000 + id(FaultHistoryRecord04Year).state;
+      int month = id(FaultHistoryRecord04Month).state;
+      int day = id(FaultHistoryRecord04Day).state;
+      int hour = id(FaultHistoryRecord04Hour).state;
+      int minute = id(FaultHistoryRecord04Minute).state;
+      int second = id(FaultHistoryRecord04Second).state;
+      value = (day ? to_string(day) + "." : "") + (month ? to_string(month) + "." : "") + (year ? to_string(year) + " " : "") +
+              (day ? to_string(hour) + ":" : "") + (month ? to_string(minute) + ":" : "") + (year ? to_string(second) + "" : "") +
+              "\n HEX: " + id(FaultHistoryRecord04).state;
+      return value;
+
+#    F850    16  FaultHistoryRecord05      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord05
+    name: "${name} FaultHistoryRecord05"
+    address: 0xF850
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF850","%x",x);
+       return {};
+
+#    F860    16  FaultHistoryRecord06      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord06
+    name: "${name} FaultHistoryRecord06"
+    address: 0xF860
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF860","%x",x);
+       return {};
+
+#    F870    16  FaultHistoryRecord07      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord07
+    name: "${name} FaultHistoryRecord07"
+    address: 0xF870
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF870","%x",x);
+       return {};
+
+#    F880    16  FaultHistoryRecord08      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord08
+    name: "${name} FaultHistoryRecord08"
+    address: 0xF880
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF880","%x",x);
+       return {};
+
+#    F890    16  FaultHistoryRecord09      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord09
+    name: "${name} FaultHistoryRecord09"
+    address: 0xF890
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF890","%x",x);
+       return {};
+
+#    F8A0    16  FaultHistoryRecord10      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord10
+    name: "${name} FaultHistoryRecord10"
+    address: 0xF8A0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF8A0","%x",x);
+       return {};
+
+#    F8B0    16  FaultHistoryRecord11      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord11
+    name: "${name} FaultHistoryRecord11"
+    address: 0xF8B0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF8B0","%x",x);
+       return {};
+
+#    F8C0    16  FaultHistoryRecord12      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord12
+    name: "${name} FaultHistoryRecord12"
+    address: 0xF8C0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF8C0","%x",x);
+       return {};
+
+#    F8D0    16  FaultHistoryRecord13      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord13
+    name: "${name} FaultHistoryRecord13"
+    address: 0xF8D0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF8D0","%x",x);
+       return {};
+
+#    F8E0    16  FaultHistoryRecord14      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord14
+    name: "${name} FaultHistoryRecord14"
+    address: 0xF8E0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF8E0","%x",x);
+       return {};
+
+#    F8F0    16  FaultHistoryRecord15      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord15
+    name: "${name} FaultHistoryRecord15"
+    address: 0xF8F0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF8F0","%x",x);
+       return {};
+
+#    F900    16  FaultHistoryRecord16      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord16
+    name: "${name} FaultHistoryRecord16"
+    address: 0xF900
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF900","%x",x);
+       return {};
+
+#    F910    16  FaultHistoryRecord17      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord17
+    name: "${name} FaultHistoryRecord17"
+    address: 0xF910
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF910","%x",x);
+       return {};
+
+#    F920    16  FaultHistoryRecord18      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord18
+    name: "${name} FaultHistoryRecord18"
+    address: 0xF920
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF920","%x",x);
+       return {};
+
+#    F930    16  FaultHistoryRecord19      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord19
+    name: "${name} FaultHistoryRecord19"
+    address: 0xF930
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF930","%x",x);
+       return {};
+
+#    F940    16  FaultHistoryRecord20      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord20
+    name: "${name} FaultHistoryRecord20"
+    address: 0xF940
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF940","%x",x);
+       return {};
+
+#    F950    16  FaultHistoryRecord21      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord21
+    name: "${name} FaultHistoryRecord21"
+    address: 0xF950
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF950","%x",x);
+       return {};
+
+#    F960    16  FaultHistoryRecord22      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord22
+    name: "${name} FaultHistoryRecord22"
+    address: 0xF960
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF960","%x",x);
+       return {};
+
+#    F970    16  FaultHistoryRecord23      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord23
+    name: "${name} FaultHistoryRecord23"
+    address: 0xF970
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF970","%x",x);
+       return {};
+
+#    F980    16  FaultHistoryRecord24      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord24
+    name: "${name} FaultHistoryRecord24"
+    address: 0xF980
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF980","%x",x);
+       return {};
+
+#    F990    16  FaultHistoryRecord25      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord25
+    name: "${name} FaultHistoryRecord25"
+    address: 0xF990
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF900","%x",x);
+       return {};
+
+#    F9A0    16  FaultHistoryRecord26      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord26
+    name: "${name} FaultHistoryRecord26"
+    address: 0xF9A0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF9A0","%x",x);
+       return {};
+
+#    F9B0    16  FaultHistoryRecord27      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord27
+    name: "${name} FaultHistoryRecord27"
+    address: 0xF9B0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF9B0","%x",x);
+       return {};
+
+#    F9C0    16  FaultHistoryRecord28      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord28
+    name: "${name} FaultHistoryRecord28"
+    address: 0xF9C0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF9C0","%x",x);
+       return {};
+
+#    F9D0    16  FaultHistoryRecord29      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord29
+    name: "${name} FaultHistoryRecord29"
+    address: 0xF9D0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF9D0","%x",x);
+       return {};
+
+#    F9E0    16  FaultHistoryRecord30      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord30
+    name: "${name} FaultHistoryRecord30"
+    address: 0xF9E0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF9E0","%x",x);
+       return {};
+
+#    F9F0    16  FaultHistoryRecord31      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: FaultHistoryRecord31
+    name: "${name} FaultHistoryRecord31"
+    address: 0xF9F0
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xF9F0","%x",x);
+       return {};
+
+#    FA00    16  AutoTestRecord            RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: AutoTestRecord
+    name: "${name} AutoTestRecord"
+    address: 0xFA00
+    register_count: 0x0010
+    response_size: 0x0020
+    register_type: holding
+    force_new_range: true
+    skip_updates: 5
+    raw_encode: HEXBYTES
+    lambda: |-
+       ESP_LOGD("Register 0xFA00","%x",x);
+       return {};
+
+# #  FA10     1  RecordReserved0           R   1                  %d           Unsigned
+# #  FA11     1  RecordReserved1           R   1                  %d           Unsigned

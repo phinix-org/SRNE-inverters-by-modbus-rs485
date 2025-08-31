@@ -1,0 +1,135 @@
+select:
+#    E004     1  BatTypeSet                RW  1          -       %d           Unsigned          0       14      6  0: User define
+#                                                                                                                   1: SLD
+#                                                                                                                   2: FLD
+#                                                                                                                   3: GEL
+#                                                                                                                   4: Lithium iron phosphate x 14
+#                                                                                                                   5: Lithium iron phosphate x 15
+#                                                                                                                   6: Lithium iron phosphate x 16
+#                                                                                                                   7: Lithium iron phosphate x 7
+#                                                                                                                   8: Lithium iron phosphate x 8
+#                                                                                                                   9: Lithium iron phosphate x 9
+#                                                                                                                   10: Ternary lithium x 7
+#                                                                                                                   11: Ternary lithium x 8
+#                                                                                                                   12: Ternary lithium x 13
+#                                                                                                                   13: Ternary lithium x 14
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatTypeSet
+    name: "${name} BatTypeSet"
+    address: 0xE004
+    value_type: U_WORD
+    icon: mdi:battery
+    optionsmap:
+      "User defined": 0
+      "Sealed (SLD)": 1
+      "Open (FLD)": 2
+      "GEL": 3
+      "Lithium iron phosphate x 14": 4
+      "Lithium iron phosphate x 15": 5
+      "Lithium iron phosphate x 16": 6
+      "Lithium iron phosphate x 7": 7
+      "Lithium iron phosphate x 8": 8
+      "Lithium iron phosphate x 9": 9
+      "Ternary lithium x 7": 10
+      "Ternary lithium x 8": 11
+      "Ternary lithium x 13": 12
+      "Ternary lithium x 14": 13
+
+#    E025     1  BMSChgLCMode              RW  1                  %d           Unsigned          0        2      1
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BMSChgLCMode
+    name: "${name} BMSChgLCMode"
+    address: 0xE025
+    value_type: U_WORD
+    icon: mdi:battery
+    optionsmap:
+      "mode 0": 0
+      "mode 1": 1
+      "mode 2": 2
+
+#    E02C     1  OnTimeChargeEn            RW  1          -       %d           Unsigned          0        1      0  0: disabled; 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: OnTimeChargeEn
+    name: "${name} OnTimeChargeEn"
+    address: 0xE025
+    value_type: U_WORD
+    icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E033     1  OnTimeDischgEn            RW  1          -       %d           Unsigned          0        1      0  0: disabled; 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: OnTimeDischgEn
+    name: "${name} OnTimeDischgEn"
+    address: 0xE033
+    value_type: U_WORD
+    icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E037     1  InvToGridEn               RW  1          -       %d           Unsigned          0        3      0  0: off-grid mode (banned)
+#                                                                                                                   1: grid-connected mode
+#                                                                                                                   2: ACout anti-reverse flow
+#                                                                                                                   3: ACin anti-reverse flow
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: InvToGridEn
+    name: "${name} InvToGridEn"
+    address: 0xE037
+    value_type: U_WORD
+    icon: mdi:battery
+    optionsmap:
+      "off-grid mode (banned)": 0
+      "grid-connected mode": 1
+      "ACout anti-reverse flow": 2
+      "ACin anti-reverse flow": 3
+
+#    E038     1  LeakageCurrDtcEn          RW  1          -       %d           Unsigned          0        1      0  0: disabled; 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LeakageCurrDtcEn
+    name: "${name} LeakageCurrDtcEn"
+    address: 0xE038
+    value_type: U_WORD
+    icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E039     1  PvPowerPrioritySet        RW  1                  %d           Unsigned          0        2      0  0: charging priority 1: load priority
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: PvPowerPrioritySet
+    name: "${name} PvPowerPrioritySet"
+    address: 0xE039
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "PV charging priority": 0
+      "PV load priority": 1
+
+#    E03A     1  BattTemperCompEn          RW  1          -       %d           Unsigned          0        1      0  0: disabled 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BattTemperCompEn
+    name: "${name} BattTemperCompEn"
+    address: 0xE03A
+    value_type: U_WORD
+    icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E04E     1   OnGridDchgSocBalanceEn   RW  1                  %d           Unsigned          0         1     0  Only for HESP120SH3 
+#    E04F     1   OnGridChgSocBalanceEn    RW  1                  %d           Unsigned          0         1     0  Only for HESP120SH3 
+#    E051     1   reserved                 RW  1                  %d           Unsigned          0         1     0  Only for HESP120SH3 
+#    E055     1   MaxConsumptionEn         RW  1                  %d           Unsigned          0         1     0  This option is effective when scheduled discharge is enabled. 
+#                                                                                                                   When enabled,  during periods outside of the scheduled charging times, 
+#                                                                                                                   the inverter discharges to the UPS load; 
+#                                                                                                                   when disabled, no discharge occurs. 

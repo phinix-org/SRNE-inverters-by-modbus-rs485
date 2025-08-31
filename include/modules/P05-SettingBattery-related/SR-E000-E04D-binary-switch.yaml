@@ -1,0 +1,190 @@
+# number:
+# #    E04D     1  TimedChgSource            RW  1                  %d           Unsigned          0        7      0  Bit00: AC power during the charging period 1, 0: disabled, 1: enabled
+# #                                                                                                                   Bit01: electric generator during the charging period 1, 0: disabled, 1: enabled
+# #                                                                                                                   Bit02: AC power during the charging period 2, 0: disabled, 1: enabled
+# #                                                                                                                   Bit03: electric generator during the charging period 2, 0: disabled, 1: enabled
+# #                                                                                                                   Bit04: AC power during the charging period 3, 0: disabled, 1: enabled
+# #                                                                                                                   Bit05: electric generator during the charging period 3, 0: disabled, 1: enabled
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     id: TimedChgSource
+#     name: "${name} TimedChgSource"
+#     address: 0xE040
+#     value_type: U_WORD
+#     mode: 'box'
+# 
+
+switch:
+#    E04D     1  TimedChgSource            RW  1                  %d           Unsigned          0        7      0  Bit00: AC power during the charging period 1, 0: disabled, 1: enabled
+#                                                                                                                   Bit01: electric generator during the charging period 1, 0: disabled, 1: enabled
+#                                                                                                                   Bit02: AC power during the charging period 2, 0: disabled, 1: enabled
+#                                                                                                                   Bit03: electric generator during the charging period 2, 0: disabled, 1: enabled
+#                                                                                                                   Bit04: AC power during the charging period 3, 0: disabled, 1: enabled
+#                                                                                                                   Bit05: electric generator during the charging period 3, 0: disabled, 1: enabled
+  - platform: template
+    id: TimedChgSource00
+    name: "${name} TimedChgSource00_ACpower"
+    # optimistic: true
+    restore_mode: disabled
+    lambda: |-
+      uint16_t a = id(TimedChgSource).state;
+      int b = a & 0x0001;
+      if (b > 0){
+        return 1;
+      } else {
+        return 0;
+      }
+    turn_on_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a | 0x0001;
+            return b;
+    turn_off_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a & 0xFFFE;
+            return b;
+
+  - platform: template
+    id: TimedChgSource01
+    name: "${name} TimedChgSource01_generator"
+    # optimistic: true
+    restore_mode: disabled
+    lambda: |-
+      uint16_t a = id(TimedChgSource).state;
+      int b = a & 0x0002;
+      if (b > 0){
+        return 1;
+      } else {
+        return 0;
+      }
+    turn_on_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a | 0x0002;
+            return b;
+    turn_off_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a & 0xFFFD;
+            return b;
+
+  - platform: template
+    id: TimedChgSource02
+    name: "${name} TimedChgSource02_ACpower"
+    # optimistic: true
+    restore_mode: disabled
+    lambda: |-
+      uint16_t a = id(TimedChgSource).state;
+      int b = a & 0x0004;
+      if (b > 0){
+        return 1;
+      } else {
+        return 0;
+      }
+    turn_on_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a | 0x0004;
+            return b;
+    turn_off_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a & 0xFFFB;
+            return b;
+
+  - platform: template
+    id: TimedChgSource03
+    name: "${name} TimedChgSource03_generator"
+    # optimistic: true
+    restore_mode: disabled
+    lambda: |-
+      uint16_t a = id(TimedChgSource).state;
+      int b = a & 0x0008;
+      if (b > 0){
+        return 1;
+      } else {
+        return 0;
+      }
+    turn_on_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a | 0x0008;
+            return b;
+    turn_off_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a & 0xFFF7;
+            return b;
+
+  - platform: template
+    id: TimedChgSource04
+    name: "${name} TimedChgSource04_ACpower"
+    # optimistic: true
+    restore_mode: disabled
+    lambda: |-
+      uint16_t a = id(TimedChgSource).state;
+      int b = a & 0x0010;
+      if (b > 0){
+        return 1;
+      } else {
+        return 0;
+      }
+    turn_on_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a | 0x0010;
+            return b;
+    turn_off_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a & 0xFFEF;
+            return b;
+
+  - platform: template
+    id: TimedChgSource05
+    name: "${name} TimedChgSource05_generator"
+    # optimistic: true
+    restore_mode: disabled
+    lambda: |-
+      uint16_t a = id(TimedChgSource).state;
+      int b = a & 0x0020;
+      if (b > 0){
+        return 1;
+      } else {
+        return 0;
+      }
+    turn_on_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a | 0x0020;
+            return b;
+    turn_off_action:
+       - number.set:
+          id: TimedChgSource
+          value: !lambda |-
+            uint16_t a = id(TimedChgSource).state;
+            int b = a & 0xFFDF;
+            return b;

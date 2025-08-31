@@ -1,0 +1,365 @@
+# P07  User Setting Area for Inverter Parameters 
+#    E200     1  Rs485AddrSet              RW  1          -       %d           Unsigned          1      254      1  Integer (1 to 254)                                                                                                       逆变器485地址设置                  
+#    E201     1  ParallMode                RW  1          -       %d           Unsigned          0        7      0  0: single machine
+#                                                                                                                   1: single-phase parallel
+#                                                                                                                   2: two-phase parallel
+#                                                                                                                   3: two-phase parallel 120
+#                                                                                                                   4: two-phase parallel 180
+#                                                                                                                   5: three-phase A 
+#                                                                                                                   6: three-phase B
+#                                                                                                                   7: three-phase C                                                                                                         并机模式                                                         
+#    E202     1  PassWordSet               W   1          -       %d           Unsigned          0    65535      0  The password consists of four decimal digits. If the parameter is 0, there is no password.                               用户密码设置值                     
+#                                                                                                                   Keyboard passwords can be changed by keyboard and communication. 
+#    E203     1  PassWordInput             W   1          -       %d           Unsigned          0    65535      0                                                                                                                           密码输入                        
+#    E204     1  OutputPriority            RW  1          -       %d           Unsigned          0        2      1  0: solar
+#                                                                                                                   1: line            
+#                                                                                                                   2: sbu                                                                                                                   输出优先级                       
+#    E205     1  IbattLineChgLimit         RW  0.1        A       %.1fA        Unsigned          0      200     60  Maximum charging current limit for AC power charging                                                                     市电充电电流限制                    
+#    E206     1  BattEqualChgEnable        RW  1          V       %d           Unsigned          0        1      0                                                                                                                           均衡充电使能                      
+#    E207     1  N_G_FuncEn                RW  1                  %d           Unsigned          0        1      0  N and PE ground cable short circuit enabled (only available on some models)                                              NPE地线短接功能使能                 
+#    E208     1  OutputVoltSet             RW  0.1        V       %.1fV        Unsigned        100      264    120                                                                                                                           输出电压(默认220V)                
+#    E209     1  OutputFreqSet             RW  0.01       Hz      %.2fHz       Unsigned         45       65     50                                                                                                                           输出频率(默认50Hz)                
+#    E20A     1  MaxChgCurr                RW  0.1        A       %.1fA        Unsigned          0      200     80                                                                                                                           最大充电电流                      
+#    E20B     1  AcVoltRange               RW  1                  %d           Unsigned          0        1      1  0: wide band (APL) 1: narrow band (UPS)                                                                                  AC输入范围                      
+#    E20C     1  PowerSavingMode           RW  1                  %d           Unsigned          0        1      0  0: disabled 1: enabled                                                                                                   节能模式                        
+#    E20D     1  AutoRestartOvLoad         RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   过载自动重启                      
+#    E20E     1  AutoRestartOvTemper       RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   过温自动重启                      
+#    E20F     1  ChgSourcePriority         RW  1                  %d           Unsigned          0        3      2  0: PV priority (AC power charging available when PV fails)
+#                                                                                                                   1: AC power priority (PV charging available when AC power fail充电优先级                       
+#    E210     1  AlarmEnable               RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   告警控制                        
+#    E211     1  AlarmEnWhenSourceLoss     RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   输入源中断时告警使能                  
+#    E212     1  BypEnableWhenOvLoad       RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   过载旁路使能                      
+# #  E213     1  RecordFaultEnable         RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   记录故障码                       
+#    E214     1  BmsErrStopEnable          RW  1                  %d           Unsigned          0        1      0  0: disabled 1: enabled                                                                                                   BMS故障停机使能                   
+#    E215     1  BmsCommEnable             RW  1                  %d           Unsigned          0        2      0  0: disabled 1: 485-BMS enabled 2: CAN-BMS enabled                                                                        BMS使能                       
+#    E216     1  DcLoadSwitch              RW  1                  %d           Unsigned          0        1      0  0: off, 1: on                                                                                                            直流负载控制                      
+# #  E217     1  InvParamSetReserved01     RW  1                  %d           Unsigned          0        0      0  Reserved                                                                                                                 保留                          
+#    E218     1  DeratePower               RW  1                  %.001fW      Unsigned       1000    15000      0  Reduction of machine power rating                                                                                        机器降额功率                      
+# #  E219     1  InvParamSetReserved02     R   1                  %d           Unsigned          0        1      0                                                                                                                           保留                          
+#    E21A     1  GeneratorChgDisable       R   1                  %d           Unsigned          0        1      0  Generator charging by default (can be disabled)                                                                          发电机启动充电禁止                   
+#    E21B     1  Rs485BmsProtocol          RW  1                  %d           Unsigned          0       30      7                                                                                                                           BMS协议                       
+#    E21C     1  MaxLineCurrent            RW  0.1                %.1fA        Unsigned          0      100     40  Only for some custom models (ancient style ship of                                                                       旁路最大输入电流                    
+#    E21D     1  MaxLinePower              RW  1                  %d           Unsigned          0    65535     50  RGSC) Peak clipping power of grid 50: 500 W                                                                              旁路最大输入功率                    
+#    E21E     1  OutputPhaseSet            RW  1                  %d           Unsigned          0        2      0  Only for single split-phase machine; 0: single-phase connection, 1: three-phase connection, 2: split-phase connection    单机分相AC接线类型                  
+#    E21F     1  GenWorkMode               RW  1                  %d           Unsigned          0        1      0                                                                                                                           柴油机工作模式                     
+#    E220     1  GenChgMaxCurr             RW  0.1        A       %.1fA        Unsigned          0      100     40                                                                                                                           柴油机充电电流                     
+#    E221     1  GenRatePower              RW  1                  %d           Unsigned          0    65535   6000                                                                                                                           柴油机额定功率                     
+#    E222     1  PvToSmartLoadEn           RW  1                  %d           Unsigned          0        1      0  reserved 
+#    E223     1  GridToSmartLoadEn         RW  1                  %d           Unsigned          0        1      0  The enabling setup of the grid supply to the secondary load 
+#    E224     1  WeekSet                   RW  1                  %d           Unsigned          1        7      1  Week setting 
+#    E225     1  WeekToOnTimeEn            RW  1                  %d           Unsigned          1        7      1  bit00:Start a timed charge on Monday 
+#                                                                                                                   bit01:Start scheduled charging on Tuesday ... 
+#    E226     2  LoadConsumTotalTh         RW  0.1        kWh     %.fkWh       Unsigned          0    65536      0  Accumulated electricity consumption threshold 
+#    E228     1  MpptInputWindEn           RW  1                  %d           Unsigned          1       64      1  bit00: MPPT1 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit01: MPPT2 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit02: MPPT3 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit03: MPPT4 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit04: MPPT5 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit05: MPPT6 connected to wind turbine (0: Disabled, 1: Enabled) 
+#    E229     1  DryContactGridVoltTh      RW  0.1        V       %.1fV        Unsigned        100      300    280  The dry contact will activate when the grid voltage exceeds this set value. 
+#                                                                                                                   The dry contact will deactivate when the voltage is 5V below this set value. 
+#    E22A     1  DryContactPVtoGridTh      RW  1          W       %dW          Unsigned        500    65535   2000  The dry contact will activate when the PV grid-connected power exceeds this set value. 
+#                                                                                                                   The dry contact will deactivate when the power is 250W below this set value.
+#    E22B    13  InvParamSetReserved03     RW  1                  %d           Unsigned          0    65535      0  
+#    E238    28  WindVoltCurrTab           RW  1                  %d           Unsigned          0     1000      0  Wind Turbine Voltage and Current Curve: 
+#                                                                                                                   Offset 00: Volt1 
+#                                                                                                                   Offset 01: Curr1 
+#                                                                                                                   Offset 02: Volt2 
+#                                                                                                                   Offset 03: Curr2 
+#                                                                                                                   ... 
+#                                                                                                                   Offset 26: Volt14 
+#                                                                                                                   Offset 27: Curr14 
+#                                                                                                                   Scaling Information: 
+#                                                                                                                       Voltage Scaling: Actual value, no decimal places. 
+#                                                                                                                       Current Scaling: Scaled by a factor of 10, one decimal place. 
+
+number:
+#    E200     1  Rs485AddrSet              RW  1          -       %d           Unsigned          1      254      1  Integer (1 to 254)                                                                                                       逆变器485地址设置                  
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} Rs485AddrSet"
+    address: 0xE200
+    register_type: holding
+    value_type: U_WORD
+    min_value: 1
+    max_value: 254
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E201     1  ParallMode                RW  1          -       %d           Unsigned          0        7      0  0: single machine
+#                                                                                                                   1: single-phase parallel
+#                                                                                                                   2: two-phase parallel
+#                                                                                                                   3: two-phase parallel 120
+#                                                                                                                   4: two-phase parallel 180
+#                                                                                                                   5: three-phase A 
+#                                                                                                                   6: three-phase B
+#                                                                                                                   7: three-phase C                                                                                                         并机模式                                                         
+#    E202     1  PassWordSet               W   1          -       %d           Unsigned          0    65535      0  The password consists of four decimal digits. If the parameter is 0, there is no password.                               用户密码设置值                     
+#                                                                                                                   Keyboard passwords can be changed by keyboard and communication. 
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     name: "${name} PassWordSet"
+#     address: 0xE202
+#     register_type: holding
+#     value_type: U_WORD
+#     min_value: 0
+#     max_value: 1
+#     step:  1
+#     # mode: 'slider'
+#     mode: 'box'
+# 
+# #    E203     1  PassWordInput             W   1          -       %d           Unsigned          0    65535      0                                                                                                                           密码输入                        
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     name: "${name} PassWordInput"
+#     address: 0xE203
+#     register_type: holding
+#     value_type: U_WORD
+#     min_value: 0
+#     max_value: 1
+#     step:  1
+#     # mode: 'slider'
+#     mode: 'box'
+
+#    E204     1  OutputPriority            RW  1          -       %d           Unsigned          0        2      1  0: solar
+#                                                                                                                   1: line            
+#                                                                                                                   2: sbu                                                                                                                   输出优先级                       
+#    E205     1  IbattLineChgLimit         RW  0.1        A       %.1fA        Unsigned          0      200     60  Maximum charging current limit for AC power charging                                                                     市电充电电流限制                    
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} IbattLineChgLimit"
+    address: 0xE205
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    icon: mdi:current-dc
+    min_value: 0
+    max_value: 200
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E206     1  BattEqualChgEnable        RW  1          V       %d           Unsigned          0        1      0                                                                                                                           均衡充电使能                      
+#    E207     1  N_G_FuncEn                RW  1                  %d           Unsigned          0        1      0  N and PE ground cable short circuit enabled (only available on some models)                                              NPE地线短接功能使能                 
+#    E208     1  OutputVoltSet             RW  0.1        V       %.1fV        Unsigned        100      264    120                                                                                                                           输出电压(默认220V)                
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} OutputVoltSet"
+    address: 0xE208
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    # icon: mdi:current-dc
+    min_value: 100
+    max_value: 264
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E209     1  OutputFreqSet             RW  0.01       Hz      %.2fHz       Unsigned         45       65     50                                                                                                                           输出频率(默认50Hz)                
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} OutputFreqSet"
+    address: 0xE209
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 45
+    max_value: 65
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E20A     1  MaxChgCurr                RW  0.1        A       %.1fA        Unsigned          0      200     80                                                                                                                           最大充电电流                      
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} MaxChgCurr"
+    address: 0xE20A
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    icon: mdi:current-dc
+    min_value: 0
+    max_value: 200
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E20B     1  AcVoltRange               RW  1                  %d           Unsigned          0        1      1  0: wide band (APL) 1: narrow band (UPS)                                                                                  AC输入范围                      
+#    E20C     1  PowerSavingMode           RW  1                  %d           Unsigned          0        1      0  0: disabled 1: enabled                                                                                                   节能模式                        
+#    E20D     1  AutoRestartOvLoad         RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   过载自动重启                      
+#    E20E     1  AutoRestartOvTemper       RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   过温自动重启                      
+#    E20F     1  ChgSourcePriority         RW  1                  %d           Unsigned          0        3      2  0: PV priority (AC power charging available when PV fails)
+#                                                                                                                   1: AC power priority (PV charging available when AC power fail充电优先级                       
+#    E210     1  AlarmEnable               RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   告警控制                        
+#    E211     1  AlarmEnWhenSourceLoss     RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   输入源中断时告警使能                  
+#    E212     1  BypEnableWhenOvLoad       RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   过载旁路使能                      
+# #  E213     1  RecordFaultEnable         RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled                                                                                                   记录故障码                       
+#    E214     1  BmsErrStopEnable          RW  1                  %d           Unsigned          0        1      0  0: disabled 1: enabled                                                                                                   BMS故障停机使能                   
+#    E215     1  BmsCommEnable             RW  1                  %d           Unsigned          0        2      0  0: disabled 1: 485-BMS enabled 2: CAN-BMS enabled                                                                        BMS使能                       
+#    E216     1  DcLoadSwitch              RW  1                  %d           Unsigned          0        1      0  0: off, 1: on                                                                                                            直流负载控制                      
+# #  E217     1  InvParamSetReserved01     RW  1                  %d           Unsigned          0        0      0  Reserved                                                                                                                 保留                          
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} InvParamSetReserved01"
+    address: 0xE217
+    register_type: holding
+    value_type: U_WORD
+    # min_value: 0
+    # max_value: 0
+    # step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E218     1  DeratePower               RW  1                  %.001fW      Unsigned       1000    15000      0  Reduction of machine power rating                                                                                        机器降额功率                      
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} DeratePower"
+    address: 0xE218
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    # icon: mdi:current-dc
+    min_value: 1000
+    max_value: 15000
+    step:  0.001
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 1000
+
+# #  E219     1  InvParamSetReserved02     R   1                  %d           Unsigned          0        1      0                                                                                                                           保留                          
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} InvParamSetReserved02"
+    address: 0xE219
+    register_type: holding
+    value_type: U_WORD
+    # min_value: 0
+    # max_value: 0
+    # step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E21A     1  GeneratorChgDisable       R   1                  %d           Unsigned          0        1      0  Generator charging by default (can be disabled)                                                                          发电机启动充电禁止                   
+#    E21B     1  Rs485BmsProtocol          RW  1                  %d           Unsigned          0       30      7                                                                                                                           BMS协议                       
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   name: "${name} Rs485BmsProtocol"
+  #   address: 0xE21B
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # min_value: 0
+  #   # max_value: 0
+  #   # step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+#    E21C     1  MaxLineCurrent            RW  0.1                %.1fA        Unsigned          0      100     40  Only for some custom models (ancient style ship of RGSC)                                                                       旁路最大输入电流                    
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} MaxLineCurrent"
+    address: 0xE21C
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    icon: mdi:current-dc
+    min_value: 0
+    max_value: 100
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E21D     1  MaxLinePower              RW  1                  %d           Unsigned          0    65535     50  Peak clipping power of grid 50: 500 W                                                                              旁路最大输入功率                    
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} MaxLinePower"
+    address: 0xE21D
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65535
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+    # multiply: 1000
+
+#    E21E     1  OutputPhaseSet            RW  1                  %d           Unsigned          0        2      0  Only for single split-phase machine; 0: single-phase connection, 1: three-phase connection, 2: split-phase connection    单机分相AC接线类型                  
+#    E21F     1  GenWorkMode               RW  1                  %d           Unsigned          0        1      0                                                                                                                           柴油机工作模式                     
+#    E220     1  GenChgMaxCurr             RW  0.1        A       %.1fA        Unsigned          0      100     40                                                                                                                           柴油机充电电流                     
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GenChgMaxCurr"
+    address: 0xE220
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    icon: mdi:current-dc
+    min_value: 0
+    max_value: 150
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E221     1  GenRatePower              RW  1                  %d           Unsigned          0    65535   6000                                                                                                                           柴油机额定功率                     
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GenRatePower"
+    address: 0xE221
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65535
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+    # multiply: 1000
+
+#    E222     1  PvToSmartLoadEn           RW  1                  %d           Unsigned          0        1      0  reserved 
+#    E223     1  GridToSmartLoadEn         RW  1                  %d           Unsigned          0        1      0  The enabling setup of the grid supply to the secondary load 
+#    E224     1  WeekSet                   RW  1                  %d           Unsigned          1        7      1  Week setting 
+#    E225     1  WeekToOnTimeEn            RW  1                  %d           Unsigned          1        7      1  bit00:Start a timed charge on Monday 
+#                                                                                                                   bit01:Start scheduled charging on Tuesday ... 
+#    E226     2  LoadConsumTotalTh         RW  0.1        kWh     %.fkWh       Unsigned          0    65536      0  Accumulated electricity consumption threshold 
+#    E228     1  MpptInputWindEn           RW  1                  %d           Unsigned          1       64      1  bit00: MPPT1 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit01: MPPT2 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit02: MPPT3 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit03: MPPT4 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit04: MPPT5 connected to wind turbine (0: Disabled, 1: Enabled) 
+#                                                                                                                   bit05: MPPT6 connected to wind turbine (0: Disabled, 1: Enabled) 
+#    E229     1  DryContactGridVoltTh      RW  0.1        V       %.1fV        Unsigned        100      300    280  The dry contact will activate when the grid voltage exceeds this set value. 
+#                                                                                                                   The dry contact will deactivate when the voltage is 5V below this set value. 
+#    E22A     1  DryContactPVtoGridTh      RW  1          W       %dW          Unsigned        500    65535   2000  The dry contact will activate when the PV grid-connected power exceeds this set value. 
+#                                                                                                                   The dry contact will deactivate when the power is 250W below this set value.
+#    E22B    13  InvParamSetReserved03     RW  1                  %d           Unsigned          0    65535      0  
+#    E238    28  WindVoltCurrTab           RW  1                  %d           Unsigned          0     1000      0  Wind Turbine Voltage and Current Curve: 
+#                                                                                                                   Offset 00: Volt1 
+#                                                                                                                   Offset 01: Curr1 
+#                                                                                                                   Offset 02: Volt2 
+#                                                                                                                   Offset 03: Curr2 
+#                                                                                                                   ... 
+#                                                                                                                   Offset 26: Volt14 
+#                                                                                                                   Offset 27: Curr14 
+#                                                                                                                   Scaling Information: 
+#                                                                                                                       Voltage Scaling: Actual value, no decimal places. 
+#                                                                                                                       Current Scaling: Scaled by a factor of 10, one decimal place. 
