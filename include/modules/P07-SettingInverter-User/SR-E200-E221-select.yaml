@@ -1,0 +1,282 @@
+select:
+#    E204     1  OutputPriority            RW  1          -       %d           Unsigned          0        2      1  0: solar
+#                                                                                                                   1: line
+#                                                                                                                   2: sbu
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: OutputPriority
+    name: "${name} OutputPriority"
+    address: 0xE204
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "solar": 0
+      "line": 1
+      "sbu": 2
+
+#    E206     1  BattEqualChgEnable        RW  1          V       %d           Unsigned          0        1      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BattEqualChgEnable
+    name: "${name} BattEqualChgEnable"
+    address: 0xE206
+    value_type: U_WORD
+    icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E207     1  N_G_FuncEn                RW  1                  %d           Unsigned          0        1      0  N and PE ground cable short circuit enabled (only available on some models)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: N_G_FuncEn
+    name: "${name} N_G_FuncEn"
+    address: 0xE207
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E20B     1  AcVoltRange               RW  1                  %d           Unsigned          0        1      1  0: wide band (APL) 1: narrow band (UPS)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: AcVoltRange
+    name: "${name} AcVoltRange"
+    address: 0xE20B
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "wide band (APL)": 0
+      "narrow band (UPS)": 1
+
+#    E20C     1  PowerSavingMode           RW  1                  %d           Unsigned          0        1      0  0: disabled 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: PowerSavingMode
+    name: "${name} PowerSavingMode"
+    address: 0xE20C
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E20D     1  AutoRestartOvLoad         RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: AutoRestartOvLoad
+    name: "${name} AutoRestartOvLoad"
+    address: 0xE20D
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E20E     1  AutoRestartOvTemper       RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: AutoRestartOvTemper
+    name: "${name} AutoRestartOvTemper"
+    address: 0xE20E
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E20F     1  ChgSourcePriority         RW  1                  %d           Unsigned          0        3      2  0: PV priority (AC power charging available when PV fails)
+#                                                                                                                   1: AC power priority (PV charging available when AC power fail)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: ChgSourcePriority
+    name: "${name} ChgSourcePriority"
+    address: 0xE20F
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "PV priority": 0
+      "AC power priority": 1
+
+#    E210     1  AlarmEnable               RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: AlarmEnable
+    name: "${name} AlarmEnable"
+    address: 0xE210
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E211     1  AlarmEnWhenSourceLoss     RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: AlarmEnWhenSourceLoss
+    name: "${name} AlarmEnWhenSourceLoss"
+    address: 0xE211
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E212     1  BypEnableWhenOvLoad       RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BypEnableWhenOvLoad
+    name: "${name} BypEnableWhenOvLoad"
+    address: 0xE212
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+# #  E213     1  RecordFaultEnable         RW  1                  %d           Unsigned          0        1      1  0: disabled 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: RecordFaultEnable
+    name: "${name} RecordFaultEnable"
+    address: 0xE213
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E214     1  BmsErrStopEnable          RW  1                  %d           Unsigned          0        1      0  0: disabled 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BmsErrStopEnable
+    name: "${name} BmsErrStopEnable"
+    address: 0xE214
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E215     1  BmsCommEnable             RW  1                  %d           Unsigned          0        2      0  0: disabled 1: 485-BMS enabled 2: CAN-BMS enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BmsCommEnable
+    name: "${name} BmsCommEnable"
+    address: 0xE215
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "485-BMS enabled": 1
+      "CAN-BMS enabled": 2
+
+#    E216     1  DcLoadSwitch              RW  1                  %d           Unsigned          0        1      0  0: off, 1: on
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: DcLoadSwitch
+    name: "${name} DcLoadSwitch"
+    address: 0xE216
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "off": 0
+      "on": 1
+
+#    E21A     1  GeneratorChgDisable       R   1                  %d           Unsigned          0        1      0  Generator charging by default (can be disabled)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: GeneratorChgDisable
+    name: "${name} GeneratorChgDisable"
+    address: 0xE21A
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "disabled": 0
+      "enabled": 1
+
+#    E21B     1  Rs485BmsProtocol          RW  1                  %d           Unsigned          0       30      7
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: Rs485BmsProtocol
+    name: "${name} Rs485BmsProtocol"
+    address: 0xE21B
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      # "protocol 00": 0
+      # "protocol 01": 1
+      # "protocol 02": 2
+      # "protocol 03": 3
+      # "protocol 04": 4
+      # "protocol 05": 5
+      # "protocol 06": 6
+      # "protocol 07": 7
+      # "protocol 08": 8
+      # "protocol 09": 9
+      # "protocol 10": 10
+      # "protocol 11": 11
+      # "protocol 12": 12
+      # "protocol 13": 13
+      # "protocol 14": 14
+      # "protocol 15": 15
+      # "protocol 16": 16
+      "00 PACE - PAC": 0            # Modbus-RTU 
+      "01 RUDA - RDA": 1            # Modbus-RTU 
+      "02 AOGUAN - AOG": 2          # Modbus-ASCII 
+      "03 OULITE - OLT": 3          # Modbus-ASCII 
+      "04 CFGE - CEF": 4            # Modbus-RTU 
+      "05 XINWANGDA - XWD": 5       # Modbus-ASCII 
+      "06 DAQIN - DAQ": 6           # Modbus-RTU 
+      "07 WOW (SRNE) - WOW": 7      # Modbus-RTU 
+      "08 PYLON - PYL": 8           # Modbus-ASCII 
+      "09 MIT (FOX ESS) - SHO": 9   # Modbus-RTU 
+      "10 Xinyi - XIX": 10          # Modbus-ASCII 
+      "11 PowMr - POL": 11          # Modbus-RTU 
+      "12 GU0X - GUX": 12           # Modbus-RTU 
+      "13 SMK POWER - SMK": 13      # Modbus-ASCII 
+      "14 VILION - VOL": 14         # Modbus 
+      "15 UZENERGY - WES": 15       # CAN (?)
+      "protocol 16": 16
+      "17 UZE": 17
+      "18 PYLON - PYL_CAN": 18
+      "protocol 19": 19
+      "protocol 20": 20
+      "protocol 21": 21
+      "protocol 22": 22
+      "protocol 23": 23
+      "protocol 24": 24
+      "protocol 25": 25
+      "protocol 26": 26
+      "protocol 27": 27
+      "protocol 28": 28
+      "protocol 29": 29
+      "protocol 30": 30
+
+#    E21E     1  OutputPhaseSet            RW  1                  %d           Unsigned          0        2      0  Only for single split-phase machine; 0: single-phase connection, 1: three-phase connection, 2: split-phase connection
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: OutputPhaseSet
+    name: "${name} OutputPhaseSet"
+    address: 0xE21E
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "single-phase connection": 0
+      "three-phase connection": 1
+      "split-phase connection": 2
+
+#    E21F     1  GenWorkMode               RW  1                  %d           Unsigned          0        1      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: GenWorkMode
+    name: "${name} GenWorkMode"
+    address: 0xE21F
+    value_type: U_WORD
+    # icon: mdi:battery
+    optionsmap:
+      "mode 0": 0
+      "mode 1": 1
+      # "disabled": 0
+      # "enabled": 1

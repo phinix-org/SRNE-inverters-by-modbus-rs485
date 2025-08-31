@@ -1,0 +1,940 @@
+# P08  Setting Area for Inverter Grid-connection Parameters
+#    E400     1  GridActivePowerSet        RW  1          W       %d           Unsigned          0    65000      0
+#    E401     1  GridPfSet                 RW  0.001              %.3f         Signed           -1        1      1  Only suitable for models supporting grid-connection, with the adjustment range of -80−100 and 80−100
+#    E402     1  GridQset                  RW  0.1        %       %d           Signed         -100      100      0  Grid-connection reactive power setting
+#    E403     1  GridStandard              RW  1                  %d           Signed            0      100    100  Grid-connection standard setting
+#    E404     1  GridUVLevel1              RW  0.1        V       %.1f         Unsigned          0      270    184
+#    E405     1  GridUVTime1               RW  20         mS      %d           Unsigned         20   600000    120
+#    E406     1  GridUVResumLevel1         RW  0.1        V       %.1f         Unsigned          0      270    198
+#    E407     1  GridUVResumTime1          RW  20         mS      %d           Unsigned         20   600000    120
+#    E408     1  GridUVLevel2              RW  0.1        V       %.1f         Unsigned          0      270    184
+#    E409     1  GridUVTime2               RW  20         mS      %d           Unsigned         20   600000    120
+#    E40A     1  GridUVResumLevel2         RW  0.1        V       %.1f         Unsigned          0      270    198
+#    E40B     1  GridUVResumTime2          RW  20         mS      %d           Unsigned         20   600000    120
+#    E40C     1  GridOVLevel1              RW  0.1        V       %.1f         Unsigned          0      270    280
+#    E40D     1  GridOVTime1               RW  20         mS      %d           Unsigned         20   600000    120
+#    E40E     1  GridOVResumLevel1         RW  0.1        V       %.1f         Unsigned          0      320    270
+#    E40F     1  GridOVResumTime1          RW  20         mS      %d           Unsigned         20   600000    120
+#    E410     1  GridOVLevel2              RW  0.1        V       %.1f         Unsigned          0      320    280
+#    E411     1  GridOVTime2               RW  20         mS      %d           Unsigned         20   600000    120
+#    E412     1  GridOVResumLevel2         RW  0.1        V       %.1f         Unsigned          0      320    270
+#    E413     1  GridOVResumTime2          RW  20         mS      %d           Unsigned         20   600000    120
+#    E414     1  GridUFLevel1              RW  0.01       Hz      %.2f         Unsigned          0       65     47
+#    E415     1  GridUFTime1               RW  20         mS      %d           Unsigned         20   600000    120
+#    E416     1  GridUFResumLevel1         RW  0.01       Hz      %.2f         Unsigned          0       65     48
+#    E417     1  GridUFResumTime1          RW  20         mS      %d           Unsigned         20   600000    120
+#    E418     1  GridUFLevel2              RW  0.01       Hz      %.2f         Unsigned          0       65     47
+#    E419     1  GridUFTime2               RW  20         mS      %d           Unsigned         20   600000    120
+#    E41A     1  GridUFResumLevel2         RW  0.01       Hz      %.2f         Unsigned          0       65     48
+#    E41B     1  GridUFResumTime2          RW  20         mS      %d           Unsigned         20   600000    120
+#    E41C     1  GridOFLevel1              RW  0.01       Hz      %.2f         Unsigned          0       65   52.5
+#    E41D     1  GridOFTime1               RW  20         mS      %d           Unsigned         20   600000    120
+#    E41E     1  GridOFResumLevel1         RW  0.01       Hz      %.2f         Unsigned          0       65     51
+#    E41F     1  GridOFResumTime1          RW  20         mS      %d           Unsigned         20   600000    120
+#    E420     1  GridOFLevel2              RW  0.01       Hz      %.2f         Unsigned          0       65   52.5
+#    E421     1  GridOFTime2               RW  20         mS      %d           Unsigned         20   600000    120
+#    E422     1  GridOFResumLevel2         RW  0.01       Hz      %.2f         Unsigned          0       65     51
+#    E423     1  GridOFResumTime2          RW  20         mS      %d           Unsigned         20   600000    120
+#    E424     1  ReConnectGridTime         RW  1          S       %d           Unsigned          0      600     60
+#    E425     1  IsoCheckEn                RW  1                  %d           Unsigned          0        1      1
+#    E426     1  IsoProtectPoint           RW  1                  %d           Unsigned         10    65535     15
+#    E427     1  GridFuncEnable            RW  1                  %d           Unsigned          0    65535      0
+#    E428     1  GridStandUserMode         RW  1                  %d           Unsigned          0        1      0
+#    E429     1  Cei021AutoTestStep        RW  1                  %d           Unsigned          0    65535      0
+#    E42A     1  BattForGridPowerEn        RW  1                  %d           Unsigned          0        3      0  0: Battery is not discharged.
+#                                                                                                                   1: Battery discharges to UPS loads.
+#                                                                                                                   2: Battery discharges to home loads.
+#                                                                                                                   3: Grid connection
+#    E42B     1  ExCtRatio                 RW  1                  %d           Unsigned          0     5000   1000
+#    E42C     1  ZeroExportPower           RW  1          W       %d           Unsigned          0      500     20  When it is in the anti-reverse current function, the input target power is set for the grid.
+#    E42D     1  ReConnPowerRamp           RW  1          S       %d           Unsigned          0     1000     60  Rising rate of reconnection power
+#    E42E     1  WattPFCurveEnable         RW  1                  %d           Unsigned          0        1      0
+#    E42F     1  HLVRTEnable               RW  1                  %d           Unsigned          0        1      0
+#    E430     1  Cei021AutoTestStart       RW  1                  %d           Unsigned          0        1      0
+#    E431     1  AfciEnable                RW  1                  %d           Unsigned          0        1      0
+#    E432     1  NormalConnDlyTsec         RW  1          S       %d           Signed            0     1000     30
+#    E433     1  NormalConnPwrRampTsec     RW  1          S       %d           Unsigned          0     1000     30
+#    E434     1  ConnVoltLow               RW  0.1        V       %.1f         Unsigned          0      320    110
+#    E435     1  ConnVoltHigh              RW  0.1        V       %.1f         Unsigned          0      320    140
+#    E436     1  ConnFreqLow               RW  0.01       Hz      %.2f         Unsigned         40       70     60
+#    E437     1  ConnFreqHigh              RW  0.01       Hz      %.2f         Unsigned         40       70     60
+#    E438     1  CT auto detect enable     RW  1                  %d           Unsigned          0        1      0
+#    E439     1  CT manual setting         RW  1                  %d           Unsigned          0        2      0
+#    E43A     1  GridFuncEnable1           RW  1                  %d           Unsigned          0    65535      0
+#    E43B     1  DRMS_Enable               RW  1                  %d           Unsigned          0        1      0   0:disable 1:enable
+#    E43C     1  GridUVLevel3              RW  0.1        V       %.1f         Unsigned                             Power grid three-level undervoltage protection point
+#    E43D     1  GridUVTime3               RW  20         ms      %d           Unsigned                             Power grid three-level undervoltage protection time
+#    E43E     1  SmartMeterEn              RW  1                  %d           Unsigned                             0:disable 1:Single phase meter 2:Three phase meter
+#    E43F     1  reserved                  RW  1                  %d           Unsigned
+#    E440     1  SmartMeter1Addr           RW  1                  %d           Unsigned          1      254      2
+#    E441     1  SmartMeter2Addr           RW  1                  %d           Unsigned          1      254      2
+#    E442     1  GridAvgOvEn               RW  1                  %d           Unsigned          0        1      0  0: Disabled, 1: Enabled
+#    E443     1  GridAvgOvTh               RW  0.1        V       %.1f         Unsigned          0      300    255
+#    E444     1  GridAvgOvDelay            RW  1          s       %d           Unsigned          1     3600    600
+#    E445     1  GridRocofEn               RW  1                  %d           Unsigned          0        1      0  0: Disabled, 1: Enabled
+#    E446     1  GridRocofTh               RW  0.1        Hz/sec  %.1f         Unsigned          0.1     10      2
+#    E447     1  GridRocofDelay            RW  1          mS      %d           Unsigned         20    60000    100
+
+number:
+#    E400     1  GridActivePowerSet        RW  1          W       %d           Unsigned          0    65000      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridActivePowerSet"
+    address: 0xE400
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+    # multiply: 10
+
+#    E401     1  GridPfSet                 RW  0.001              %.3f         Signed           -1        1      1  Only suitable for models supporting grid-connection, with the adjustment range of -80−100 and 80−100
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridPfSet"
+    address: 0xE401
+    register_type: holding
+    value_type: S_WORD
+    # unit_of_measurement: "%"
+    device_class: power_factor
+    # accuracy_decimals: 1
+    min_value: -1
+    max_value: 1
+    step:  0.001
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 1000
+
+#    E402     1  GridQset                  RW  0.1        %       %d           Signed         -100      100      0  Grid-connection reactive power setting
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridQset"
+    address: 0xE402
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "%"
+    min_value: -100
+    max_value: 100
+    step:  0.1
+    device_class: power_factor
+    mode: 'box'
+    multiply: 10
+    # accuracy_decimals: 1
+
+#    E403     1  GridStandard              RW  1                  %d           Signed            0      100    100  Grid-connection standard setting
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridStandard"
+    address: 0xE403
+    register_type: holding
+    value_type: S_WORD
+    # unit_of_measurement: "%"
+    # device_class: power_factor
+    # accuracy_decimals: 1
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E404     1  GridUVLevel1              RW  0.1        V       %.1f         Unsigned          0      270    184
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridUVLevel1"
+    address: 0xE404
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 270
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E405     1  GridUVTime1               RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridUVTime1
+    name: "${name} GridUVTime1"
+    address: 0xE405
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E406     1  GridUVResumLevel1         RW  0.1        V       %.1f         Unsigned          0      270    198
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridUVResumLevel1"
+    address: 0xE406
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 270
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E407     1  GridUVResumTime1          RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridUVResumTime1
+    name: "${name} GridUVResumTime1"
+    address: 0xE407
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E408     1  GridUVLevel2              RW  0.1        V       %.1f         Unsigned          0      270    184
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridUVLevel2"
+    address: 0xE408
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 270
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E409     1  GridUVTime2               RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridUVTime2
+    name: "${name} GridUVTime2"
+    address: 0xE409
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E40A     1  GridUVResumLevel2         RW  0.1        V       %.1f         Unsigned          0      270    198
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridUVResumLevel2"
+    address: 0xE40A
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 270
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E40B     1  GridUVResumTime2          RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridUVResumTime2
+    name: "${name} GridUVResumTime2"
+    address: 0xE40B
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E40C     1  GridOVLevel1              RW  0.1        V       %.1f         Unsigned          0      270    280
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridOVLevel1"
+    address: 0xE40C
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 270
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E40D     1  GridOVTime1               RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridOVTime1
+    name: "${name} GridOVTime1"
+    address: 0xE40D
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E40E     1  GridOVResumLevel1         RW  0.1        V       %.1f         Unsigned          0      320    270
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridOVResumLevel1"
+    address: 0xE40E
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 320
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E40F     1  GridOVResumTime1          RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridOVResumTime1
+    name: "${name} GridOVResumTime1"
+    address: 0xE40F
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E410     1  GridOVLevel2              RW  0.1        V       %.1f         Unsigned          0      320    280
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridOVLevel2"
+    address: 0xE410
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 320
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+    force_new_range: true
+
+#    E411     1  GridOVTime2               RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridOVTime2
+    name: "${name} GridOVTime2"
+    address: 0xE411
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E412     1  GridOVResumLevel2         RW  0.1        V       %.1f         Unsigned          0      320    270
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridOVResumLevel2"
+    address: 0xE412
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 320
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E413     1  GridOVResumTime2          RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridOVResumTime2
+    name: "${name} GridOVResumTime2"
+    address: 0xE413
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E414     1  GridUFLevel1              RW  0.01       Hz      %.2f         Unsigned          0       65     47
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridUFLevel1"
+    address: 0xE414
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E415     1  GridUFTime1               RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridUFTime1
+    name: "${name} GridUFTime1"
+    address: 0xE415
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E416     1  GridUFResumLevel1         RW  0.01       Hz      %.2f         Unsigned          0       65     48
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridUFResumLevel1"
+    address: 0xE416
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E417     1  GridUFResumTime1          RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridUFResumTime1
+    name: "${name} GridUFResumTime1"
+    address: 0xE417
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E418     1  GridUFLevel2              RW  0.01       Hz      %.2f         Unsigned          0       65     47
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridUFLevel2"
+    address: 0xE418
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E419     1  GridUFTime2               RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridUFTime2
+    name: "${name} GridUFTime2"
+    address: 0xE419
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E41A     1  GridUFResumLevel2         RW  0.01       Hz      %.2f         Unsigned          0       65     48
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridUFResumLevel2"
+    address: 0xE41A
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E41B     1  GridUFResumTime2          RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridUFResumTime2
+    name: "${name} GridUFResumTime2"
+    address: 0xE41B
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E41C     1  GridOFLevel1              RW  0.01       Hz      %.2f         Unsigned          0       65   52.5
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridOFLevel1"
+    address: 0xE41C
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E41D     1  GridOFTime1               RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridOFTime1
+    name: "${name} GridOFTime1"
+    address: 0xE41D
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E41E     1  GridOFResumLevel1         RW  0.01       Hz      %.2f         Unsigned          0       65     51
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridOFResumLevel1"
+    address: 0xE41E
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E41F     1  GridOFResumTime1          RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridOFResumTime1
+    name: "${name} GridOFResumTime1"
+    address: 0xE41F
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E420     1  GridOFLevel2              RW  0.01       Hz      %.2f         Unsigned          0       65   52.5
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridOFLevel2"
+    address: 0xE420
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+    force_new_range: true
+
+#    E421     1  GridOFTime2               RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridOFTime2
+    name: "${name} GridOFTime2"
+    address: 0xE421
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E422     1  GridOFResumLevel2         RW  0.01       Hz      %.2f         Unsigned          0       65     51
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridOFResumLevel2"
+    address: 0xE422
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 65
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E423     1  GridOFResumTime2          RW  20         mS      %d           Unsigned         20   600000    120
+  - platform: modbus_controller
+    id: GridOFResumTime2
+    name: "${name} GridOFResumTime2"
+    address: 0xE423
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E424     1  ReConnectGridTime         RW  1          S       %d           Unsigned          0      600     60
+  - platform: modbus_controller
+    id: ReConnectGridTime
+    name: "${name} ReConnectGridTime"
+    address: 0xE424
+    value_type: U_WORD
+    unit_of_measurement: "S"
+    icon: mdi:timer-sand
+    min_value: 0
+    max_value: 600
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E425     1  IsoCheckEn                RW  1                  %d           Unsigned          0        1      1
+#    E426     1  IsoProtectPoint           RW  1                  %d           Unsigned         10    65535     15
+  - platform: modbus_controller
+    name: "${name} IsoProtectPoint"
+    address: 0xE426
+    value_type: U_WORD
+    min_value: 10
+    max_value: 65535
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E427     1  GridFuncEnable            RW  1                  %d           Unsigned          0    65535      0
+  - platform: modbus_controller
+    name: "${name} GridFuncEnable"
+    address: 0xE427
+    value_type: U_WORD
+    min_value: 0
+    max_value: 65535
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E428     1  GridStandUserMode         RW  1                  %d           Unsigned          0        1      0
+#    E429     1  Cei021AutoTestStep        RW  1                  %d           Unsigned          0    65535      0
+  - platform: modbus_controller
+    name: "${name} Cei021AutoTestStep"
+    address: 0xE429
+    value_type: U_WORD
+    min_value: 0
+    max_value: 65535
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E42A     1  BattForGridPowerEn        RW  1                  %d           Unsigned          0        3      0  0: Battery is not discharged.
+#                                                                                                                   1: Battery discharges to UPS loads.
+#                                                                                                                   2: Battery discharges to home loads.
+#                                                                                                                   3: Grid connection
+#    E42B     1  ExCtRatio                 RW  1                  %d           Unsigned          0     5000   1000
+  - platform: modbus_controller
+    name: "${name} ExCtRatio"
+    address: 0xE42B
+    value_type: U_WORD
+    min_value: 0
+    max_value: 5000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E42C     1  ZeroExportPower           RW  1          W       %d           Unsigned          0      500     20  When it is in the anti-reverse current function, the input target power is set for the grid.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} ZeroExportPower"
+    address: 0xE42C
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    # icon: 
+    min_value: 0
+    max_value: 500
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 1
+
+#    E42D     1  ReConnPowerRamp           RW  1          S       %d           Unsigned          0     1000     60  Rising rate of reconnection power
+  - platform: modbus_controller
+    id: ReConnPowerRamp
+    name: "${name} ReConnPowerRamp"
+    address: 0xE42D
+    value_type: U_WORD
+    unit_of_measurement: "S"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 1000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+    force_new_range: true
+
+#    E42E     1  WattPFCurveEnable         RW  1                  %d           Unsigned          0        1      0
+#    E42F     1  HLVRTEnable               RW  1                  %d           Unsigned          0        1      0
+#    E430     1  Cei021AutoTestStart       RW  1                  %d           Unsigned          0        1      0
+#    E431     1  AfciEnable                RW  1                  %d           Unsigned          0        1      0
+#    E432     1  NormalConnDlyTsec         RW  1          S       %d           Signed            0     1000     30
+  - platform: modbus_controller
+    id: NormalConnDlyTsec
+    name: "${name} NormalConnDlyTsec"
+    address: 0xE432
+    value_type: S_WORD
+    unit_of_measurement: "S"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 1000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E433     1  NormalConnPwrRampTsec     RW  1          S       %d           Unsigned          0     1000     30
+  - platform: modbus_controller
+    id: NormalConnPwrRampTsec
+    name: "${name} NormalConnPwrRampTsec"
+    address: 0xE433
+    value_type: U_WORD
+    unit_of_measurement: "S"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 1000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E434     1  ConnVoltLow               RW  0.1        V       %.1f         Unsigned          0      320    110
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} ConnVoltLow"
+    address: 0xE434
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 320
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E435     1  ConnVoltHigh              RW  0.1        V       %.1f         Unsigned          0      320    140
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} ConnVoltHigh"
+    address: 0xE435
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 320
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E436     1  ConnFreqLow               RW  0.01       Hz      %.2f         Unsigned         40       70     60
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} ConnFreqLow"
+    address: 0xE436
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 70
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E437     1  ConnFreqHigh              RW  0.01       Hz      %.2f         Unsigned         40       70     60
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} ConnFreqHigh"
+    address: 0xE437
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    # icon: mdi:current-dc
+    min_value: 0
+    max_value: 70
+    step:  0.01
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 100
+
+#    E438     1  CT auto detect enable     RW  1                  %d           Unsigned          0        1      0
+#    E439     1  CT manual setting         RW  1                  %d           Unsigned          0        2      0
+#    E43A     1  GridFuncEnable1           RW  1                  %d           Unsigned          0    65535      0
+  - platform: modbus_controller
+    name: "${name} GridFuncEnable1"
+    address: 0xE43A
+    value_type: U_WORD
+    min_value: 0
+    max_value: 65535
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E43B     1  DRMS_Enable               RW  1                  %d           Unsigned          0        1      0   0:disable 1:enable
+#    E43C     1  GridUVLevel3              RW  0.1        V       %.1f         Unsigned                             Power grid three-level undervoltage protection point
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} GridUVLevel3"
+    address: 0xE43C
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    min_value: 0
+    max_value: 320                             # Value verification reQired
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+    force_new_range: true
+
+#    E43D     1  GridUVTime3               RW  20         ms      %d           Unsigned                             Power grid three-level undervoltage protection time
+  - platform: modbus_controller
+    id: GridUVTime3
+    name: "${name} GridUVTime3"
+    address: 0xE43D
+    value_type: U_WORD
+    unit_of_measurement: "mS"
+    icon: mdi:timer-sand
+    min_value: 20
+    max_value: 600000
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E43E     1  SmartMeterEn              RW  1                  %d           Unsigned                             0:disable 1:Single phase meter 2:Three phase meter
+#    E43F     1  reserved                  RW  1                  %d           Unsigned
+#    E440     1  SmartMeter1Addr           RW  1                  %d           Unsigned          1      254      2
+#    E441     1  SmartMeter2Addr           RW  1                  %d           Unsigned          1      254      2
+#    E442     1  GridAvgOvEn               RW  1                  %d           Unsigned          0        1      0  0: Disabled, 1: Enabled
+#    E443     1  GridAvgOvTh               RW  0.1        V       %.1f         Unsigned          0      300    255
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   name: "${name} GridAvgOvTh"
+  #   address: 0xE443
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   unit_of_measurement: "V"
+  #   device_class: voltage
+  #   min_value: 0
+  #   max_value: 320
+  #   step:  0.1
+  #   # mode: 'slider'
+  #   mode: 'box'
+  #   multiply: 10
+
+#    E444     1  GridAvgOvDelay            RW  1          s       %d           Unsigned          1     3600    600
+  # - platform: modbus_controller
+  #   id: GridAvgOvDelay
+  #   name: "${name} GridAvgOvDelay"
+  #   address: 0xE444
+  #   value_type: U_WORD
+  #   unit_of_measurement: "S"
+  #   icon: mdi:timer-sand
+  #   min_value: 1
+  #   max_value: 3600
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+#    E445     1  GridRocofEn               RW  1                  %d           Unsigned          0        1      0  0: Disabled, 1: Enabled
+#    E446     1  GridRocofTh               RW  0.1        Hz/sec  %.1f         Unsigned          0.1     10      2
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   name: "${name} GridRocofTh"
+  #   address: 0xE446
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   unit_of_measurement: "Hz/s"
+  #   device_class: frequency
+  #   # icon: mdi:current-dc
+  #   min_value: 0
+  #   max_value: 10
+  #   step:  0.1
+  #   # mode: 'slider'
+  #   mode: 'box'
+  #   multiply: 10
+
+#    E447     1  GridRocofDelay            RW  1          mS      %d           Unsigned         20    60000    100
+  # - platform: modbus_controller
+  #   id: GridRocofDelay
+  #   name: "${name} GridRocofDelay"
+  #   address: 0xE447
+  #   value_type: U_WORD
+  #   unit_of_measurement: "mS"
+  #   icon: mdi:timer-sand
+  #   min_value: 20
+  #   max_value: 60000
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+

@@ -1,0 +1,35 @@
+text_sensor:
+#    F040     3  PowerOnTime               R   1                  %d           Unsigned                             Refer to the time register for the current time format.
+  - platform: template
+    name: "${name} PowerOnTime"
+    # update_interval: 60s
+  # device_class: timestamp
+    lambda: |-
+      std::string value = "Unknown";
+      int year = 2000 + id(PowerOnTimeYear).state;
+      int month = id(PowerOnTimeMonth).state;
+      int day = id(PowerOnTimeDay).state;
+      int hour = id(PowerOnTimeHour).state;
+      int minute = id(PowerOnTimeMinute).state;
+      int second = id(PowerOnTimeSecond).state;
+      value = (day ? to_string(day) + "." : "") + (month ? to_string(month) + "." : "") + (year ? to_string(year) + " " : "") +
+              (day ? to_string(hour) + ":" : "") + (month ? to_string(minute) + ":" : "") + (year ? to_string(second) + "" : "");
+      return value;
+
+#    F043     3  LastEquaChgTime           R   1                  %d           Unsigned                             Refer to the time register for the current time format.
+  - platform: template
+    name: "${name} LastEquaChgTime"
+    # update_interval: 60s
+  # device_class: timestamp
+    lambda: |-
+      std::string value = "Unknown";
+      int year = 2000 + id(LastEquaChgTimeYear).state;
+      int month = id(LastEquaChgTimeMonth).state;
+      int day = id(LastEquaChgTimeDay).state;
+      int hour = id(LastEquaChgTimeHour).state;
+      int minute = id(LastEquaChgTimeMinute).state;
+      int second = id(LastEquaChgTimeSecond).state;
+      value = (day ? to_string(day) + "." : "") + (month ? to_string(month) + "." : "") + (year ? to_string(year) + " " : "") +
+              (day ? to_string(hour) + ":" : "") + (month ? to_string(minute) + ":" : "") + (year ? to_string(second) + "" : "");
+      return value;
+

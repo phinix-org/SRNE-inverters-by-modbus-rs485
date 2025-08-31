@@ -1,0 +1,1706 @@
+# P05  Setting Area for  Battery-related Parameters
+# #  E000     1  BatParmReserved0          RW  1          -       %d           Unsigned          0        1      0
+#    E001     1  PvChgCurrSet              RW  0.1        A       %dA          Unsigned          0      150     80  PV charging current limit. Generation-1 machine: 50 A, generation-2 machine: 60 A, and generation-3 machine: 80 A−100 A
+# #  E002     1  BatRateCap                RW  1          AH      %dAH         Unsigned          0      400    100
+#    E003     1  BatRateVolt               RW  1          V       %dV          Unsigned         12      255     48  12: 12 V
+#                                                                                                                   24: 24 V
+#                                                                                                                   36: 36 V
+#                                                                                                                   48: 48 V
+#    E004     1  BatTypeSet                RW  1          -       %d           Unsigned          0       14      6  0: User define
+#                                                                                                                   1: SLD
+#                                                                                                                   2: FLD
+#                                                                                                                   3: GEL
+#                                                                                                                   4: Lithium iron phosphate x 14
+#                                                                                                                   5: Lithium iron phosphate x 15
+#                                                                                                                   6: Lithium iron phosphate x 16
+#                                                                                                                   7: Lithium iron phosphate x 7
+#                                                                                                                   8: Lithium iron phosphate x 8
+#                                                                                                                   9: Lithium iron phosphate x 9
+#                                                                                                                   10: Ternary lithium x 7
+#                                                                                                                   11: Ternary lithium x 8
+#                                                                                                                   12: Ternary lithium x 13
+#                                                                                                                   13: Ternary lithium x 14
+#    E005     1  BatOverVolt               RW  0.1        V       %.1fV        Unsigned          9     15.5   15.5  Battery charging over-voltage protection point
+#                                                                                                                   (converted to the voltage corresponding to 12 V, followed by the same battery voltage)
+#    E006     1  BatChgLimitVolt           RW  0.1        V       %.1fV        Unsigned          9     15.5   14.4  Over-charging protection voltage
+#    E007     1  BatConstChgVolt           RW  0.1        V       %.1fV        Unsigned          9     15.5   14.4  Equalizing charging voltage
+#    E008     1  BatImprovChgVolt          RW  0.1        V       %.1fV        Unsigned          9     15.5   14.4  Lead-acid battery is prohibited from boost charge, and lithium battery is prohibited from over-charging voltage.
+#    E009     1  BatFloatChgVolt           RW  0.1        V       %.1fV        Unsigned          9     15.5     14  For lead-acid battery
+#    E00A     1  BatImprovChgBackVolt      RW  0.1        V       %.1fV        Unsigned          9     15.5   13.2  After the battery enters floating charging, the battery voltage is lower than the judged point again,
+#                                                                                                                   and the battery enters boost charge again.
+#    E00B     1  BatOverDischgBackVolt     RW  0.1        V       %.1fV        Unsigned          9     15.5   12.6  After the battery is protected from over-discharge and under-voltage, it is returned to the discharged state.
+#    E00C     1  BatUnderVolt              RW  0.1        V       %.1fV        Unsigned          9     15.5     11  Alarming of low battery voltage without load cut-off
+#    E00D     1  BatOverDischgVolt         RW  0.1        V       %.1fV        Unsigned          9     15.5   12.2  Alarming of low battery voltage with load cut-off
+#    E00E     1  BatDischgLimitVolt        RW  0.1        V       %.1fV        Unsigned          9     15.5   11.2  During the battery over-discharge delay, the battery voltage is lower than the judged point,
+#                                                                                                                   and then the load is off at once.
+#    E00F     1  BatStopSOC                RW  1          -       %d%          Unsigned          0      100      5  Discharge cut-off SOC
+#    E010     1  BatOverDischgDelayTime    RW  1          S       %dS          Unsigned          0      120     60
+#    E011     1  BatConstChgTime           RW  1          Min     %dmin        Unsigned          0      900    120
+#    E012     1  BatImprovChgTime          RW  1          Min     %dmin        Unsigned         10      900    120
+#    E013     1  BatConstChgGapTime        RW  1          day     %dDay        Unsigned          0      255     30
+# #  E014     1  CoeffTemperCompen         RW  1          mV/°C/2 %d           Signed            0       10      5  Invalid
+# #  E015     1  ChgMaxTemper              RW  1          V°C     %d           Signed          -40      100     60  Invalid
+# #  E016     1  ChgMinTemper              RW  1          °C      %d           Signed          -40      100    -30  Invalid
+# #  E017     1  DisChgMaxTemper           RW  1          °C      %d           Signed          -40      100     60  Invalid
+# #  E018     1  DisChgMinTemper           RW  1          °C      %d           Signed          -40      100    -30  Invalid
+# #  E019     1  HeatBatStartTemper        RW  1          °C      %d           Signed          -40      100      0  Invalid
+# #  E01A     1  HeatBatStopTemper         RW  1          °C      %d           Signed          -40      100      5  Invalid
+#    E01B     1  BatSwitchDcVolt           RW  0.1        V       %.1fV        Unsigned          9     15.5   11.5  The load is switched to the AC power when the battery voltage falls below this judged point.
+#    E01C     1  StopChgCurrSet            RW  0.1        A       %.1fA        Unsigned          0       10      2  Only the lithium battery is effective, and when the current of constant-voltage
+#                                                                                                                   charging state is lower than this value, the charging is stopped.
+#    E01D     1  StopChgSocSet             RW  1          %       %d           Unsigned          0      100    100  When the SOC capacity is greater than or equal to this value, charging is stopped,
+#                                                                                                                   and it is valid for BMS communication.
+#    E01E     1  BatSocLowAlarm            RW  1          %       %d           Unsigned          0      100     15  With the alarming of low SOC capacity, it is valid for BMS communication.
+#    E01F     1  BatSocSwToLine            RW  1          %       %d           Unsigned          0      100     10  In SBU mode, the AC power is applied when the SOC capacity is less than or equal to the value.
+#    E020     1  BatSocSwToBatt            RW  1          %       %d           Unsigned          1      100    100  In SBU mode, the inverter is applied when the SOC capacity is greater than or equal to the value.
+# #  E021     1  BatParmReserved1          RW  1          -       %d           Unsigned
+#    E022     1  BattVoltSwToInv           RW  0.1        V       %.1fV        Unsigned          9     15.5     14  When the battery voltage is higher than the judged point, the inverter is switched back.
+#    E023     1  BattEqualChgTimeout       RW  1          min     %dmin        Unsigned          5      900    240  Increment+5
+#    E024     1  LiBattActiveCurrSet       RW  0.1        A       %.1fA        Unsigned          0       20      8
+#    E025     1  BMSChgLCMode              RW  1                  %d           Unsigned          0        2      1
+#    E026     1  ChargeStartTime1          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E027     1  ChargeEndTime1            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E028     1  ChargeStartTime2          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E029     1  ChargeEndTime2            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E02A     1  ChargeStartTime3          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E02B     1  ChargeEndTime3            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E02C     1  OnTimeChargeEn            RW  1          -       %d           Unsigned          0        1      0  0: disabled; 1: enabled
+#    E02D     1  DischgStartTime1          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E02E     1  DischgEndTime1            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E02F     1  DischgStartTime2          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E030     1  DischgEndTime2            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E031     1  DischgStartTime3          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E032     1  DischgEndTime3            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+#    E033     1  OnTimeDischgEn            RW  1          -       %d           Unsigned          0        1      0  0: disabled; 1: enabled
+#    E034     3  BatParmReserved2          RW  1          -       %d           Unsigned          0        -      0
+#    E037     1  InvToGridEn               RW  1          -       %d           Unsigned          0        3      0  0: off-grid mode (banned)
+#                                                                                                                   1: grid-connected mode
+#                                                                                                                   2: ACout anti-reverse flow
+#                                                                                                                   3: ACin anti-reverse flow
+#    E038     1  LeakageCurrDtcEn          RW  1          -       %d           Unsigned          0        1      0  0: disabled; 1: enabled
+#    E039     1  PvPowerPrioritySet        RW  1                  %d           Unsigned          0        2      0  0: charging priority 1: load priority
+#    E03A     1  BattTemperCompEn          RW  1          -       %d           Unsigned          0        1      0  0: disabled 1: enabled
+#    E03B     1  TimedChg1StopSOC          RW  1          %       %d           Unsigned          0      100    100  During charging period, the charging is stopped when SOC is greater than the specified value.
+#    E03C     1  TimedChg2StopSOC          RW  1          %       %d           Unsigned          0      100    100
+#    E03D     1  TimedChg3StopSOC          RW  1          %       %d           Unsigned          0      100    100
+#    E03E     1  TimedDchg1StopSOC         RW  1          %       %d           Unsigned          0      100     80  During discharging period, the discharging is stopped when SOC is less than the specified value.
+#    E03F     1  TimedDchg2StopSOC         RW  1          %       %d           Unsigned          0      100     60
+#    E040     1  TimedDchg3StopSOC         RW  1          %       %d           Unsigned          0      100     10
+#    E041     1  TimedChg1StopVolt         RW  0.1        W       %.1fV        Unsigned      40.0V    59.5V  52.0V  1,200: 12,000 W
+#    E042     1  TimedChg2StopVolt         RW  0.1        W       %.1fV        Unsigned      40.0V    59.5V  54.0V
+#    E043     1  TimedChg3StopVolt         RW  0.1        W       %.1fV        Unsigned      40.0V    59.5V  57.6V
+#    E044     1  TimedDchg1StopVolt        RW  0.1        W       %.1fV        Unsigned      40.0V    59.5V  50.0V
+#    E045     1  TimedDchg2StopVolt        RW  0.1        W       %.1fV        Unsigned      40.0V    59.5V  48.0V
+#    E046     1  TimedDchg3StopVolt        RW  0.1        W       %.1fV        Unsigned      40.0V    59.5V  46.0V
+#    E047     1  TimedDchg1MaxPower        RW  10         W       %d           Unsigned          0    12000   6000
+#    E048     1  TimedDchg2MaxPower        RW  10         W       %d           Unsigned          0    12000   6000
+#    E049     1  TimedDchg3MaxPower        RW  10         W       %d           Unsigned          0    12000   6000
+#    E04A     1  TimedChg1MaxPower         RW  10         W       %d           Unsigned          0    12000   6000
+#    E04B     1  TimedChg2MaxPower         RW  10         W       %d           Unsigned          0    12000   6000
+#    E04C     1  TimedChg3MaxPower         RW  10         W       %d           Unsigned          0    12000   6000
+#    E04D     1  TimedChgSource            RW  1                  %d           Unsigned          0        7      0  Bit00: AC power during the charging period 1, 0: disabled, 1: enabled
+#                                                                                                                   Bit01: electric generator during the charging period 1, 0: disabled, 1: enabled
+#                                                                                                                   Bit02: AC power during the charging period 2, 0: disabled, 1: enabled
+#                                                                                                                   Bit03: electric generator during the charging period 2, 0: disabled, 1: enabled
+#                                                                                                                   Bit04: AC power during the charging period 3, 0: disabled, 1: enabled
+#                                                                                                                   Bit05: electric generator during the charging period 3, 0: disabled, 1: enabled
+#    E04E     1   OnGridDchgSocBalanceEn   RW  1                  %d           Unsigned          0         1     0  Only for HESP120SH3 
+#    E04F     1   OnGridChgSocBalanceEn    RW  1                  %d           Unsigned          0         1     0  Only for HESP120SH3 
+#    E050     1   SocBalanceRatio          RW  1                  %d           Unsigned          0        10     0  Only for HESP120SH3 
+#    E051     1   reserved                 RW  1                  %d           Unsigned          0         1     0  Only for HESP120SH3 
+#    E052     1   BattVoltSmartLoadOff     RW  0.1        V       %.1fV        Unsigned         40      59.5    42
+#    E053     1   BattSocSmartLoadOn       RW  1                  %d           Unsigned          0       100    50
+#    E054     1   BattVoltSmartLoadOn      RW  0.1        V       %.1fV        Unsigned         40      59.5    42
+#    E055     1   MaxConsumptionEn         RW  1                  %d           Unsigned          0         1     0 	This option is effective when scheduled discharge is enabled. 
+#                                                                                                                   When enabled,  during periods outside of the scheduled charging times, 
+#                                                                                                                   the inverter discharges to the UPS load; 
+#                                                                                                                   when disabled, no discharge occurs. 
+
+number:
+# #  E000     1  BatParmReserved0          RW  1          -       %d           Unsigned          0        1      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatParmReserved0"
+    address: 0xE000
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+    min_value: 0
+    max_value: 1
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E001     1  PvChgCurrSet              RW  0.1        A       %dA          Unsigned          0      150     80  PV charging current limit. Generation-1 machine: 50 A, generation-2 machine: 60 A, and generation-3 machine: 80 A−100 A
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} PvChgCurrSet"
+    address: 0xE001
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 0
+    max_value: 150
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+# #  E002     1  BatRateCap                RW  1          AH      %dAH         Unsigned          0      400    100
+  - platform: modbus_controller
+    id: BatRateCap
+    name: "${name} BatRateCap"
+    address: 0xE002
+    value_type: U_WORD
+    unit_of_measurement: 'Ah'
+    icon: mdi:battery
+    skip_updates: 5
+    min_value: 0
+    max_value: 400
+    step:  1
+    mode: 'box'
+
+#    E003     1  BatRateVolt               RW  1          V       %dV          Unsigned         12      255     48  12: 12 V
+#                                                                                                                   24: 24 V
+#                                                                                                                   36: 36 V
+#                                                                                                                   48: 48 V
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatRateVolt"
+    address: 0xE003
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 12
+    max_value: 255
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+    # multiply: 10
+
+#    E004     1  BatTypeSet                RW  1          -       %d           Unsigned          0       14      6  0: User define
+#                                                                                                                   1: SLD
+#                                                                                                                   2: FLD
+#                                                                                                                   3: GEL
+#                                                                                                                   4: Lithium iron phosphate x 14
+#                                                                                                                   5: Lithium iron phosphate x 15
+#                                                                                                                   6: Lithium iron phosphate x 16
+#                                                                                                                   7: Lithium iron phosphate x 7
+#                                                                                                                   8: Lithium iron phosphate x 8
+#                                                                                                                   9: Lithium iron phosphate x 9
+#                                                                                                                   10: Ternary lithium x 7
+#                                                                                                                   11: Ternary lithium x 8
+#                                                                                                                   12: Ternary lithium x 13
+#                                                                                                                   13: Ternary lithium x 14
+#    E005     1  BatOverVolt               RW  0.1        V       %.1fV        Unsigned          9     15.5   15.5  Battery charging over-voltage protection point
+#                                                                                                                   (converted to the voltage corresponding to 12 V, followed by the same battery voltage)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatOverVolt"
+    address: 0xE005
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E006     1  BatChgLimitVolt           RW  0.1        V       %.1fV        Unsigned          9     15.5   14.4  Over-charging protection voltage
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatChgLimitVolt"
+    address: 0xE006
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E007     1  BatConstChgVolt           RW  0.1        V       %.1fV        Unsigned          9     15.5   14.4  Equalizing charging voltage
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatConstChgVolt"
+    address: 0xE007
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E008     1  BatImprovChgVolt          RW  0.1        V       %.1fV        Unsigned          9     15.5   14.4  Lead-acid battery is prohibited from boost charge, and lithium battery is prohibited from over-charging voltage.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatImprovChgVolt"
+    address: 0xE008
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E009     1  BatFloatChgVolt           RW  0.1        V       %.1fV        Unsigned          9     15.5     14  For lead-acid battery
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatFloatChgVolt"
+    address: 0xE009
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E00A     1  BatImprovChgBackVolt      RW  0.1        V       %.1fV        Unsigned          9     15.5   13.2  After the battery enters floating charging, the battery voltage is lower than the judged point again,
+#                                                                                                                   and the battery enters boost charge again.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatImprovChgBackVolt"
+    address: 0xE00A
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E00B     1  BatOverDischgBackVolt     RW  0.1        V       %.1fV        Unsigned          9     15.5   12.6  After the battery is protected from over-discharge and under-voltage, it is returned to the discharged state.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatOverDischgBackVolt"
+    address: 0xE00B
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E00C     1  BatUnderVolt              RW  0.1        V       %.1fV        Unsigned          9     15.5     11  Alarming of low battery voltage without load cut-off
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatUnderVolt"
+    address: 0xE00C
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E00D     1  BatOverDischgVolt         RW  0.1        V       %.1fV        Unsigned          9     15.5   12.2  Alarming of low battery voltage with load cut-off
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatOverDischgVolt"
+    address: 0xE00D
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E00E     1  BatDischgLimitVolt        RW  0.1        V       %.1fV        Unsigned          9     15.5   11.2  During the battery over-discharge delay, the battery voltage is lower than the judged point,
+#                                                                                                                   and then the load is off at once.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatDischgLimitVolt"
+    address: 0xE00E
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E00F     1  BatStopSOC                RW  1          -       %d%          Unsigned          0      100      5  Discharge cut-off SOC
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatStopSOC"
+    address: 0xE00F
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    icon: mdi:battery-10
+    skip_updates: 5
+    min_value: 0
+    max_value: 10
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E010     1  BatOverDischgDelayTime    RW  1          S       %dS          Unsigned          0      120     60
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatOverDischgDelayTime"
+    address: 0xE010
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "s"
+    icon: mdi:timer-settings-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 120
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E011     1  BatConstChgTime           RW  1          Min     %dmin        Unsigned          0      900    120
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatConstChgTime"
+    address: 0xE011
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "min"
+    icon: mdi:timer-settings-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 900
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E012     1  BatImprovChgTime          RW  1          Min     %dmin        Unsigned         10      900    120
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatImprovChgTime"
+    address: 0xE012
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "min"
+    icon: mdi:timer-settings-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 900
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E013     1  BatConstChgGapTime        RW  1          day     %dDay        Unsigned          0      255     30
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatConstChgGapTime"
+    address: 0xE010
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "day"
+    icon: mdi:timer-settings-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 255
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+# #  E014     1  CoeffTemperCompen         RW  1          mV/°C/2 %d           Signed            0       10      5  Invalid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: CoeffTemperCompen
+    name: "${name} CoeffTemperCompen"
+    address: 0xE014
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "mV/°C/2V"
+    icon: mdi:thermometer
+    skip_updates: 5
+    min_value: 0
+    max_value: 5
+    step:  1
+    mode: 'box'
+
+# #  E015     1  ChgMaxTemper              RW  1          V°C     %d           Signed          -40      100     60  Invalid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: ChgMaxTemper
+    name: "${name} ChgMaxTemper"
+    address: 0xE015
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "V°C"
+    icon: mdi:thermometer
+    skip_updates: 5
+    min_value: -40
+    max_value: 100
+    step:  1
+    mode: 'box'
+
+# #  E016     1  ChgMinTemper              RW  1          °C      %d           Signed          -40      100    -30  Invalid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: ChgMinTemper
+    name: "${name} ChgMinTemper"
+    address: 0xE016
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    skip_updates: 5
+    min_value: -40
+    max_value: 100
+    step:  1
+    mode: 'box'
+
+# #  E017     1  DisChgMaxTemper           RW  1          °C      %d           Signed          -40      100     60  Invalid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: DisChgMaxTemper
+    name: "${name} DisChgMaxTemper"
+    address: 0xE017
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    skip_updates: 5
+    min_value: -40
+    max_value: 100
+    step:  1
+    mode: 'box'
+
+# #  E018     1  DisChgMinTemper           RW  1          °C      %d           Signed          -40      100    -30  Invalid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: DisChgMinTemper
+    name: "${name} DisChgMinTemper"
+    address: 0xE018
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    skip_updates: 5
+    min_value: -40
+    max_value: 100
+    step:  1
+    mode: 'box'
+
+# #  E019     1  HeatBatStartTemper        RW  1          °C      %d           Signed          -40      100      0  Invalid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: HeatBatStartTemper
+    name: "${name} HeatBatStartTemper"
+    address: 0xE019
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    skip_updates: 5
+    min_value: -40
+    max_value: 100
+    step:  1
+    mode: 'box'
+
+# #  E01A     1  HeatBatStopTemper         RW  1          °C      %d           Signed          -40      100      5  Invalid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: HeatBatStopTemper
+    name: "${name} HeatBatStopTemper"
+    address: 0xE01A
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+    skip_updates: 5
+    min_value: -40
+    max_value: 100
+    step:  1
+    mode: 'box'
+
+#    E01B     1  BatSwitchDcVolt           RW  0.1        V       %.1fV        Unsigned          9     15.5   11.5  The load is switched to the AC power when the battery voltage falls below this judged point.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatSwitchDcVolt"
+    address: 0xE01B
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: current
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E01C     1  StopChgCurrSet            RW  0.1        A       %.1fA        Unsigned          0       10      2  Only the lithium battery is effective, and when the current of constant-voltage
+#                                                                                                                   charging state is lower than this value, the charging is stopped.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} StopChgCurrSet"
+    address: 0xE01C
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 0
+    max_value: 10
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E01D     1  StopChgSocSet             RW  1          %       %d           Unsigned          0      100    100  When the SOC capacity is greater than or equal to this value, charging is stopped,
+#                                                                                                                   and it is valid for BMS communication.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} StopChgSocSet"
+    address: 0xE01D
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-90
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E01E     1  BatSocLowAlarm            RW  1          %       %d           Unsigned          0      100     15  With the alarming of low SOC capacity, it is valid for BMS communication.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatSocLowAlarm"
+    address: 0xE01E
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-10
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E01F     1  BatSocSwToLine            RW  1          %       %d           Unsigned          0      100     10  In SBU mode, the AC power is applied when the SOC capacity is less than or equal to the value.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatSocSwToLine"
+    address: 0xE01F
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-10
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E020     1  BatSocSwToBatt            RW  1          %       %d           Unsigned          1      100    100  In SBU mode, the inverter is applied when the SOC capacity is greater than or equal to the value.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatSocSwToBatt"
+    address: 0xE020
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-90
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+# #  E021     1  BatParmReserved1          RW  1          -       %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatParmReserved1"
+    address: 0xE021
+    register_type: holding
+    value_type: U_WORD
+    # min_value: 0
+    # max_value: 1
+    # step:  1
+    # # mode: 'slider'
+    mode: 'box'
+
+#    E022     1  BattVoltSwToInv           RW  0.1        V       %.1fV        Unsigned          9     15.5     14  When the battery voltage is higher than the judged point, the inverter is switched back.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BattVoltSwToInv"
+    address: 0xE022
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 9
+    max_value: 15.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E023     1  BattEqualChgTimeout       RW  1          min     %dmin        Unsigned          5      900    240  Increment+5
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BattEqualChgTimeout"
+    address: 0xE023
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "min"
+    icon: mdi:timer-settings-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 900
+    step:  5
+    # mode: 'slider'
+    mode: 'box'
+
+#    E024     1  LiBattActiveCurrSet       RW  0.1        A       %.1fA        Unsigned          0       20      8
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} LiBattActiveCurrSet"
+    address: 0xE01D
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 0
+    max_value: 20
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E025     1  BMSChgLCMode              RW  1                  %d           Unsigned          0        2      1
+#    E026     1  ChargeStartTime1          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ChargeStartTime1
+  #   name: "${name} ChargeStartTime1"
+  #   address: 0xE026
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-check-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} ChargeStartTime1hour"
+    id: ChargeStartTime1hour
+    address: 0xE026
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(ChargeStartTime1minute).state);
+
+  - platform: modbus_controller
+    name: "${name} ChargeStartTime1minute"
+    id: ChargeStartTime1minute
+    address: 0xE026
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(ChargeStartTime1hour).state + x);
+
+#    E027     1  ChargeEndTime1            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ChargeEndTime1
+  #   name: "${name} ChargeEndTime1"
+  #   address: 0xE027
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-cancel-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} ChargeEndTime1hour"
+    id: ChargeEndTime1hour
+    address: 0xE027
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(ChargeEndTime1minute).state);
+
+  - platform: modbus_controller
+    name: "${name} ChargeEndTime1minute"
+    id: ChargeEndTime1minute
+    address: 0xE027
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(ChargeEndTime1hour).state + x);
+
+#    E028     1  ChargeStartTime2          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ChargeStartTime2
+  #   name: "${name} ChargeStartTime2"
+  #   address: 0xE028
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-check-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} ChargeStartTime2hour"
+    id: ChargeStartTime2hour
+    address: 0xE028
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(ChargeStartTime2minute).state);
+
+  - platform: modbus_controller
+    name: "${name} ChargeStartTime2minute"
+    id: ChargeStartTime2minute
+    address: 0xE028
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(ChargeStartTime2hour).state + x);
+
+#    E029     1  ChargeEndTime2            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ChargeEndTime2
+  #   name: "${name} ChargeEndTime2"
+  #   address: 0xE029
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-cancel-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} ChargeEndTime2hour"
+    id: ChargeEndTime2hour
+    address: 0xE029
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(ChargeEndTime2minute).state);
+
+  - platform: modbus_controller
+    name: "${name} ChargeEndTime2minute"
+    id: ChargeEndTime2minute
+    address: 0xE029
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(ChargeEndTime2hour).state + x);
+
+#    E02A     1  ChargeStartTime3          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ChargeStartTime3
+  #   name: "${name} ChargeStartTime3"
+  #   address: 0xE02A
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-check-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} ChargeStartTime3hour"
+    id: ChargeStartTime3hour
+    address: 0xE02A
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(ChargeStartTime3minute).state);
+
+  - platform: modbus_controller
+    name: "${name} ChargeStartTime3minute"
+    id: ChargeStartTime3minute
+    address: 0xE02A
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(ChargeStartTime3hour).state + x);
+
+#    E02B     1  ChargeEndTime3            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: ChargeEndTime3
+  #   name: "${name} ChargeEndTime3"
+  #   address: 0xE02B
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-cancel-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} ChargeEndTime3hour"
+    id: ChargeEndTime3hour
+    address: 0xE02B
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(ChargeEndTime3minute).state);
+
+  - platform: modbus_controller
+    name: "${name} ChargeEndTime3minute"
+    id: ChargeEndTime3minute
+    address: 0xE02B
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(ChargeEndTime3hour).state + x);
+
+#    E02C     1  OnTimeChargeEn            RW  1          -       %d           Unsigned          0        1      0  0: disabled; 1: enabled
+#    E02D     1  DischgStartTime1          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: DischargeStartTime1
+  #   name: "${name} DischargeStartTime1"
+  #   address: 0xE02D
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-check-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} DischargeStartTime1hour"
+    id: DischargeStartTime1hour
+    address: 0xE02D
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(DischargeStartTime1minute).state);
+
+  - platform: modbus_controller
+    name: "${name} DischargeStartTime1minute"
+    id: DischargeStartTime1minute
+    address: 0xE02D
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(DischargeStartTime1hour).state + x);
+
+#    E02E     1  DischgEndTime1            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: DischargeEndTime1
+  #   name: "${name} DischargeEndTime1"
+  #   address: 0xE02E
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-cancel-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} DischargeEndTime1hour"
+    id: DischargeEndTime1hour
+    address: 0xE02E
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(DischargeEndTime1minute).state);
+
+  - platform: modbus_controller
+    name: "${name} DischargeEndTime1minute"
+    id: DischargeEndTime1minute
+    address: 0xE02E
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(DischargeEndTime1hour).state + x);
+
+#    E02F     1  DischgStartTime2          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: DischargeStartTime2
+  #   name: "${name} DischargeStartTime2"
+  #   address: 0xE02F
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-check-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} DischargeStartTime2hour"
+    id: DischargeStartTime2hour
+    address: 0xE02F
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(DischargeStartTime2minute).state);
+
+  - platform: modbus_controller
+    name: "${name} DischargeStartTime2minute"
+    id: DischargeStartTime2minute
+    address: 0xE02F
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(DischargeStartTime2hour).state + x);
+
+#    E030     1  DischgEndTime2            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: DischargeEndTime2
+  #   name: "${name} DischargeEndTime2"
+  #   address: 0xE030
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-cancel-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} DischargeEndTime2hour"
+    id: DischargeEndTime2hour
+    address: 0xE030
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(DischargeEndTime2minute).state);
+
+  - platform: modbus_controller
+    name: "${name} DischargeEndTime2minute"
+    id: DischargeEndTime2minute
+    address: 0xE030
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(DischargeEndTime2hour).state + x);
+
+#    E031     1  DischgStartTime3          RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: DischargeStartTime3
+  #   name: "${name} DischargeStartTime3"
+  #   address: 0xE031
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-check-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} DischargeStartTime3hour"
+    id: DischargeStartTime3hour
+    address: 0xE031
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(DischargeStartTime3minute).state);
+
+  - platform: modbus_controller
+    name: "${name} DischargeStartTime3minute"
+    id: DischargeStartTime3minute
+    address: 0xE031
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-check-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(DischargeStartTime3hour).state + x);
+
+#    E032     1  DischgEndTime3            RW  1          h/m     %d           Unsigned          0     5947      0  Hours and minutes: 23*256+59=5,947
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   id: DischargeEndTime3
+  #   name: "${name} DischargeEndTime3"
+  #   address: 0xE032
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: "h/min"
+  #   # icon: mdi:timer-cancel-outline
+  #   min_value: 0
+  #   max_value: 5947
+  #   step:  1
+  #   # mode: 'slider'
+  #   mode: 'box'
+
+  - platform: modbus_controller
+    name: "${name} DischargeEndTime3hour"
+    id: DischargeEndTime3hour
+    address: 0xE032
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0xFF00
+    unit_of_measurement: "h"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 23
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (x * 256 + id(DischargeEndTime3minute).state);
+
+  - platform: modbus_controller
+    name: "${name} DischargeEndTime3minute"
+    id: DischargeEndTime3minute
+    address: 0xE032
+    register_type: holding
+    value_type: U_WORD
+    bitmask: 0x00FF
+    unit_of_measurement: "min"
+    icon: mdi:timer-cancel-outline
+    skip_updates: 5
+    min_value: 0
+    max_value: 59
+    step:  1
+    mode: 'box'
+    write_lambda: |-
+      return (256 * id(DischargeEndTime3hour).state + x);
+
+#    E033     1  OnTimeDischgEn            RW  1          -       %d           Unsigned          0        1      0  0: disabled; 1: enabled
+#    E034     3  BatParmReserved2          RW  1          -       %d           Unsigned          0        -      0
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatParmReserved2"
+    address: 0xE034
+    register_type: holding
+    value_type: U_WORD
+    # min_value: 0
+    # max_value: 1
+    # step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E037     1  InvToGridEn               RW  1          -       %d           Unsigned          0        3      0  0: off-grid mode (banned)
+#                                                                                                                   1: grid-connected mode
+#                                                                                                                   2: ACout anti-reverse flow
+#                                                                                                                   3: ACin anti-reverse flow
+#    E038     1  LeakageCurrDtcEn          RW  1          -       %d           Unsigned          0        1      0  0: disabled; 1: enabled
+#    E039     1  PvPowerPrioritySet        RW  1                  %d           Unsigned          0        2      0  0: charging priority 1: load priority
+#    E03A     1  BattTemperCompEn          RW  1          -       %d           Unsigned          0        1      0  0: disabled 1: enabled
+#    E03B     1  TimedChg1StopSOC          RW  1          %       %d           Unsigned          0      100    100  During charging period, the charging is stopped when SOC is greater than the specified value.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedChg1StopSOC"
+    address: 0xE03B
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-90
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E03C     1  TimedChg2StopSOC          RW  1          %       %d           Unsigned          0      100    100
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedChg2StopSOC"
+    address: 0xE03C
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-90
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E03D     1  TimedChg3StopSOC          RW  1          %       %d           Unsigned          0      100    100
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedChg3StopSOC"
+    address: 0xE03D
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-90
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E03E     1  TimedDchg1StopSOC         RW  1          %       %d           Unsigned          0      100     80  During discharging period, the discharging is stopped when SOC is less than the specified value.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedDchg1StopSOC"
+    address: 0xE03E
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-80
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E03F     1  TimedDchg2StopSOC         RW  1          %       %d           Unsigned          0      100     60
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedDchg2StopSOC"
+    address: 0xE03F
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-60
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E040     1  TimedDchg3StopSOC         RW  1          %       %d           Unsigned          0      100     10
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedDchg3StopSOC"
+    address: 0xE040
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery-10
+    skip_updates: 5
+    min_value: 0
+    max_value: 100
+    step:  1
+    # mode: 'slider'
+    mode: 'box'
+
+#    E041     1  TimedChg1StopVolt         RW  0.1        V       %.1fV        Unsigned      40.0V    59.5V  52.0V  1,200: 12,000 W
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedChg1StopVolt"
+    address: 0xE041
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 40
+    max_value: 59.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E042     1  TimedChg2StopVolt         RW  0.1        V       %.1fV        Unsigned      40.0V    59.5V  54.0V
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedChg2StopVolt"
+    address: 0xE042
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 40
+    max_value: 59.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E043     1  TimedChg3StopVolt         RW  0.1        V       %.1fV        Unsigned      40.0V    59.5V  57.6V
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedChg3StopVolt"
+    address: 0xE043
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 40
+    max_value: 59.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E044     1  TimedDchg1StopVolt        RW  0.1        V       %.1fV        Unsigned      40.0V    59.5V  50.0V
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedDchg1StopVolt"
+    address: 0xE044
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 40
+    max_value: 59.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E045     1  TimedDchg2StopVolt        RW  0.1        V       %.1fV        Unsigned      40.0V    59.5V  48.0V
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedDchg2StopVolt"
+    address: 0xE045
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 40
+    max_value: 59.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E046     1  TimedDchg3StopVolt        RW  0.1        V       %.1fV        Unsigned      40.0V    59.5V  46.0V
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedDchg3StopVolt"
+    address: 0xE046
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 40
+    max_value: 59.5
+    step:  0.1
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E047     1  TimedDchg1MaxPower        RW  10         W       %d           Unsigned          0    12000   6000
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedDchg1MaxPower"
+    address: 0xE047
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 0
+    max_value: 12000
+    step:  10
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E048     1  TimedDchg2MaxPower        RW  10         W       %d           Unsigned          0    12000   6000
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedDchg2MaxPower"
+    address: 0xE048
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 0
+    max_value: 12000
+    step:  10
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E049     1  TimedDchg3MaxPower        RW  10         W       %d           Unsigned          0    12000   6000
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedDchg3MaxPower"
+    address: 0xE049
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 0
+    max_value: 12000
+    step:  10
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E04A     1  TimedChg1MaxPower         RW  10         W       %d           Unsigned          0    12000   6000
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedChg1MaxPower"
+    address: 0xE04A
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 0
+    max_value: 12000
+    step:  10
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E04B     1  TimedChg2MaxPower         RW  10         W       %d           Unsigned          0    12000   6000
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedChg2MaxPower"
+    address: 0xE04B
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 0
+    max_value: 12000
+    step:  10
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E04C     1  TimedChg3MaxPower         RW  10         W       %d           Unsigned          0    12000   6000
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} TimedChg3MaxPower"
+    address: 0xE04C
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    icon: mdi:current-dc
+    skip_updates: 5
+    min_value: 0
+    max_value: 12000
+    step:  10
+    # mode: 'slider'
+    mode: 'box'
+    multiply: 10
+
+#    E04D     1  TimedChgSource            RW  1                  %d           Unsigned          0        7      0  Bit00: AC power during the charging period 1, 0: disabled, 1: enabled
+#                                                                                                                   Bit01: electric generator during the charging period 1, 0: disabled, 1: enabled
+#                                                                                                                   Bit02: AC power during the charging period 2, 0: disabled, 1: enabled
+#                                                                                                                   Bit03: electric generator during the charging period 2, 0: disabled, 1: enabled
+#                                                                                                                   Bit04: AC power during the charging period 3, 0: disabled, 1: enabled
+#                                                                                                                   Bit05: electric generator during the charging period 3, 0: disabled, 1: enabled
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: TimedChgSource
+    name: "${name} TimedChgSource"
+    address: 0xE040
+    value_type: U_WORD
+    mode: 'box'
+
+#    E050     1   SocBalanceRatio          RW  1                  %d           Unsigned          0        10     0  Only for HESP120SH3 
+#    E051     1   reserved                 RW  1                  %d           Unsigned          0         1     0  Only for HESP120SH3 
+#    E052     1   BattVoltSmartLoadOff     RW  0.1        V       %.1fV        Unsigned         40      59.5    42
+#    E053     1   BattSocSmartLoadOn       RW  1                  %d           Unsigned          0       100    50
+#    E054     1   BattVoltSmartLoadOn      RW  0.1        V       %.1fV        Unsigned         40      59.5    42

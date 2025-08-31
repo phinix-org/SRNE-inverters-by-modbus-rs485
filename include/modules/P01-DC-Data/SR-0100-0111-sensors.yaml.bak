@@ -1,0 +1,288 @@
+# P01 DC Data Area
+#    0100     1  BatSoc                    R   1          -       %d           Unsigned                             Percentage of remaining battery power
+#    0101     1  BatVolt                   R   0.1        V       %.1fV        Unsigned                             Battery voltage (e.g., 485 for 48.5 V)
+#    0102     1  ChargeCurr                R   0.1        A       %.1fA        Signed                               Battery current (e.g., 500 for 50.0A) Current greater than 0 indicates discharging;
+#                                                                                                                   and current less than 0 indicates charging.
+#    0103     1  DeviceBatTemper           R   0.1        °C      %.1f°C       Signed                               Battery temperature
+# #  0104     1  DcDataRevserved00         R   0.1        V       %.1fV        Unsigned                             Reserved
+# #  0105     1  DcDataRevserved01         R   0.01       A       %.2fA        Unsigned                             Reserved
+# #  0106     1  DcDataRevserved02         R   1          W       %d           Unsigned                             Reserved
+#    0107     1  Pv1Volt                   R   0.1        V       %.1fV        Unsigned                             Voltage of PV panel 1
+#    0108     1  Pv1Curr                   R   0.1        A       %.1fA        Unsigned                             Current of PV panel 1
+#    0109     1  Pv1ChargePower            R   1          W       %d           Unsigned                             Power of PV panel 1
+#    010A     1  PvTotalPower              R   1          -       %d           Unsigned                             Total PV power
+#    010B     1  ChargeState               R   1          -       %d           Unsigned                             0×0000: Charge off
+#                                                                                                                   0×0001: Quick charge
+#                                                                                                                   0×0002: Const voltage charge
+#                                                                                                                   0×0004: Float charge
+#                                                                                                                   0×0005: Reserved
+#                                                                                                                   0×0006: Li battery activate
+#                                                                                                                   0×0008: Full                                                                                                             电池充电状态
+# #  010C     2  DcDataRevserved04         R   1          -       %d           Unsigned                             Reserved
+#    010E     1  ChargePower               R   1          W       %dW          Unsigned                             PV charging power + AC charging power
+#    010F     1  Pv2Volt                   R   0.1        V       %.1fV        Unsigned                             Voltage of PV panel 2
+#    0110     1  Pv2Curr                   R   0.1        A       %.1fA        Unsigned                             Current of PV panel 2
+#    0111     1  Pv2ChargePower            R   1          W       %d           Unsigned                             Power of PV panel 2
+
+sensor:
+#    0100     1  BatSoc                    R   1          -       %d           Unsigned                             Percentage of remaining battery power
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatSoc"
+    address: 0x0100
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "%"
+    device_class: battery
+    state_class: measurement
+    accuracy_decimals: 0
+    # filters:
+    #   - multiply: 0.001
+
+#    0101     1  BatVolt                   R   0.1        V       %.1fV        Unsigned                             Battery voltage (e.g., 485 for 48.5 V)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatVolt"
+    address: 0x0101
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    state_class: measurement
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+
+#    0102     1  ChargeCurr                R   0.1        A       %.1fA        Signed                               Battery current (e.g., 500 for 50.0A) Current greater than 0 indicates discharging;
+#                                                                                                                   and current less than 0 indicates charging.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} ChargeCurr"
+    address: 0x0102
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    state_class: measurement
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+
+#    0103     1  DeviceBatTemper           R   0.1        °C      %.1f°C       Signed                               Battery temperature
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} BatTemper"
+    address: 0x0103
+    bitmask: 0x007F
+    force_new_range: true
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    accuracy_decimals: 0
+    # filters:
+    #   - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} DeviceTemper"
+    address: 0x0103
+    bitmask: 0x7F00
+    force_new_range: true
+    register_type: holding
+    value_type: S_WORD
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    accuracy_decimals: 0
+    # filters:
+    #   - multiply: 0.1
+
+# #  0104     1  DcDataRevserved00         R   0.1        V       %.1fV        Unsigned                             Reserved
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   name: "${name} DcDataRevserved00"
+  #   address: 0x0104
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   unit_of_measurement: "V"
+  #   device_class: voltage
+  #   state_class: measurement
+  #   accuracy_decimals: 1
+  #   filters:
+  #     - multiply: 10
+
+# #  0105     1  DcDataRevserved01         R   0.01       A       %.2fA        Unsigned                             Reserved
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   name: "${name} DcDataRevserved01"
+  #   address: 0x0105
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   unit_of_measurement: "A"
+  #   device_class: current
+  #   state_class: measurement
+  #   accuracy_decimals: 2
+  #   filters:
+  #     - multiply: 100
+
+# #  0106     1  DcDataRevserved02         R   1          W       %d           Unsigned                             Reserved
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   name: "${name} DcDataRevserved02"
+  #   address: 0x0106
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   unit_of_measurement: "W"
+  #   device_class: power
+  #   state_class: measurement
+  #   accuracy_decimals: 0
+  #   # filters:
+  #   #   - multiply: 10
+
+#    0107     1  Pv1Volt                   R   0.1        V       %.1fV        Unsigned                             Voltage of PV panel 1
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} Pv1Volt"
+    address: 0x0107
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    state_class: measurement
+    accuracy_decimals: 1
+    filters:
+      - multiply: 10
+
+#    0108     1  Pv1Curr                   R   0.1        A       %.1fA        Unsigned                             Current of PV panel 1
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} Pv1Curr"
+    address: 0x0108
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    state_class: measurement
+    accuracy_decimals: 1
+    filters:
+      - multiply: 10
+
+#    0109     1  Pv1ChargePower            R   1          W       %d           Unsigned                             Power of PV panel 1
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} Pv1ChargePower"
+    address: 0x0109
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+
+#    010A     1  PvTotalPower              R   1          -       %d           Unsigned                             Total PV power
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} PvTotalPower"
+    address: 0x010A
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+
+# #  010C     2  DcDataRevserved04         R   1          -       %d           Unsigned                             Reserved
+  # - platform: modbus_controller
+  #   modbus_controller_id: ${modbus_contr_id}
+  #   name: "${name} DcDataRevserved04"
+  #   address: 0x010c
+  #   register_type: holding
+  #   value_type: U_WORD
+  #   # unit_of_measurement: ""
+  #   # device_class: power
+  #   # state_class: measurement
+  #   accuracy_decimals: 0
+
+#    010E     1  ChargePower               R   1          W       %dW          Unsigned                             PV charging power + AC charging power
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} ChargePower"
+    address: 0x010E
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+
+#    010F     1  Pv2Volt                   R   0.1        V       %.1fV        Unsigned                             Voltage of PV panel 2
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} Pv2Volt"
+    address: 0x010F
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "V"
+    device_class: voltage
+    state_class: measurement
+    accuracy_decimals: 1
+    filters:
+      - multiply: 10
+
+#    0110     1  Pv2Curr                   R   0.1        A       %.1fA        Unsigned                             Current of PV panel 2
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} Pv2Curr"
+    address: 0x0110
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "A"
+    device_class: current
+    state_class: measurement
+    accuracy_decimals: 1
+    filters:
+      - multiply: 10
+
+#    0111     1  Pv2ChargePower            R   1          W       %d           Unsigned                             Power of PV panel 2
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} Pv2ChargePower"
+    address: 0x0111
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+
+text_sensor:
+#    010B     1  ChargeState               R   1          -       %d           Unsigned                             0×0000: Charge off
+#                                                                                                                   0×0001: Quick charge
+#                                                                                                                   0×0002: Const voltage charge
+#                                                                                                                   0×0004: Float charge
+#                                                                                                                   0×0005: Reserved
+#                                                                                                                   0×0006: Li battery activate
+#                                                                                                                   0×0008: Full                                                                                                             电池充电状态
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: MachType
+    name: "${name} ChargeState"
+    address: 0x0108
+    register_type: holding
+    raw_encode: HEXBYTES
+    lambda: |-
+      uint16_t value = modbus_controller::word_from_hex_str(x, 0);
+      switch (value) {
+        case 0: return std::string("Charge off");
+        case 1: return std::string("Quick charge");
+        case 2: return std::string("Const voltage charge");
+        case 4: return std::string("Float charge");
+        case 5: return std::string("Reserved");
+        case 6: return std::string("Li battery activate");
+        case 8: return std::string("Full");
+        default: return std::string("Unknown");
+      }
+      return x;
+

@@ -1,0 +1,340 @@
+sensor:
+# P10 Fault Record
+#    F800    16  FaultHistoryRecord00      RW  1                  %d           Unsigned                             Each fault record occupies 16 addresses, storing a total  of 16 fault records.
+                                                                                           #                        Internal data format definition for fault record: (defined  by internal offset address)
+                                                                                           #                        0x00: Fault code; see the instruction manual for specific definition of fault code.
+                                                                                           #                              If the fault code is 0, it  means that the fault record is invalid.
+                                                                                           #                        0x01−0x03: The time when the fault code occurs (there  is no time for generation-1 machines).
+                                                                                           #                        0x04−0x0F: Data packets captured when a fault occurs,  with a total of 12 data.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord00Year"
+    id: FaultHistoryRecord00Year
+    address: 0xF801
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord00Month"
+    id: FaultHistoryRecord00Month
+    address: 0xF801
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord00Day"
+    id: FaultHistoryRecord00Day
+    address: 0xF802
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord00Hour"
+    id: FaultHistoryRecord00Hour
+    address: 0xF802
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord00Minute"
+    id: FaultHistoryRecord00Minute
+    address: 0xF803
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord00Second"
+    id: FaultHistoryRecord00Second
+    address: 0xF803
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+#    F810    16  FaultHistoryRecord01      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord01Year"
+    id: FaultHistoryRecord01Year
+    address: 0xF811
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord01Month"
+    id: FaultHistoryRecord01Month
+    address: 0xF811
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord01Day"
+    id: FaultHistoryRecord01Day
+    address: 0xF812
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord01Hour"
+    id: FaultHistoryRecord01Hour
+    address: 0xF812
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord01Minute"
+    id: FaultHistoryRecord01Minute
+    address: 0xF813
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord01Second"
+    id: FaultHistoryRecord01Second
+    address: 0xF813
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+#    F820    16  FaultHistoryRecord02      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord02Year"
+    id: FaultHistoryRecord02Year
+    address: 0xF821
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord02Month"
+    id: FaultHistoryRecord02Month
+    address: 0xF821
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord02Day"
+    id: FaultHistoryRecord02Day
+    address: 0xF822
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord02Hour"
+    id: FaultHistoryRecord02Hour
+    address: 0xF822
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord02Minute"
+    id: FaultHistoryRecord02Minute
+    address: 0xF823
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord02Second"
+    id: FaultHistoryRecord02Second
+    address: 0xF823
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+#    F830    16  FaultHistoryRecord03      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord03Year"
+    id: FaultHistoryRecord03Year
+    address: 0xF831
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord03Month"
+    id: FaultHistoryRecord03Month
+    address: 0xF831
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord03Day"
+    id: FaultHistoryRecord03Day
+    address: 0xF832
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord03Hour"
+    id: FaultHistoryRecord03Hour
+    address: 0xF832
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord03Minute"
+    id: FaultHistoryRecord03Minute
+    address: 0xF833
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord03Second"
+    id: FaultHistoryRecord03Second
+    address: 0xF833
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+#    F840    16  FaultHistoryRecord04      RW  1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord04Year"
+    id: FaultHistoryRecord04Year
+    address: 0xF841
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord04Month"
+    id: FaultHistoryRecord04Month
+    address: 0xF841
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord04Day"
+    id: FaultHistoryRecord04Day
+    address: 0xF842
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord04Hour"
+    id: FaultHistoryRecord04Hour
+    address: 0xF842
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord04Minute"
+    id: FaultHistoryRecord04Minute
+    address: 0xF843
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} FaultHistoryRecord04Second"
+    id: FaultHistoryRecord04Second
+    address: 0xF843
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 5
+
+#    F850    16  FaultHistoryRecord05      RW  1                  %d           Unsigned
+#    F860    16  FaultHistoryRecord06      RW  1                  %d           Unsigned
+#    F870    16  FaultHistoryRecord07      RW  1                  %d           Unsigned
+#    F880    16  FaultHistoryRecord08      RW  1                  %d           Unsigned
+#    F890    16  FaultHistoryRecord09      RW  1                  %d           Unsigned
+#    F8A0    16  FaultHistoryRecord10      RW  1                  %d           Unsigned
+#    F8B0    16  FaultHistoryRecord11      RW  1                  %d           Unsigned
+#    F8C0    16  FaultHistoryRecord12      RW  1                  %d           Unsigned
+#    F8D0    16  FaultHistoryRecord13      RW  1                  %d           Unsigned
+#    F8E0    16  FaultHistoryRecord14      RW  1                  %d           Unsigned
+#    F8F0    16  FaultHistoryRecord15      RW  1                  %d           Unsigned
+#    F900    16  FaultHistoryRecord16      RW  1                  %d           Unsigned
+#    F910    16  FaultHistoryRecord17      RW  1                  %d           Unsigned
+#    F920    16  FaultHistoryRecord18      RW  1                  %d           Unsigned
+#    F930    16  FaultHistoryRecord19      RW  1                  %d           Unsigned
+#    F940    16  FaultHistoryRecord20      RW  1                  %d           Unsigned
+#    F950    16  FaultHistoryRecord21      RW  1                  %d           Unsigned
+#    F960    16  FaultHistoryRecord22      RW  1                  %d           Unsigned
+#    F970    16  FaultHistoryRecord23      RW  1                  %d           Unsigned
+#    F980    16  FaultHistoryRecord24      RW  1                  %d           Unsigned
+#    F990    16  FaultHistoryRecord25      RW  1                  %d           Unsigned
+#    F9A0    16  FaultHistoryRecord26      RW  1                  %d           Unsigned
+#    F9B0    16  FaultHistoryRecord27      RW  1                  %d           Unsigned
+#    F9C0    16  FaultHistoryRecord28      RW  1                  %d           Unsigned
+#    F9D0    16  FaultHistoryRecord29      RW  1                  %d           Unsigned
+#    F9E0    16  FaultHistoryRecord30      RW  1                  %d           Unsigned
+#    F9F0    16  FaultHistoryRecord31      RW  1                  %d           Unsigned
+#    FA00    16  AutoTestRecord            RW  1                  %d           Unsigned

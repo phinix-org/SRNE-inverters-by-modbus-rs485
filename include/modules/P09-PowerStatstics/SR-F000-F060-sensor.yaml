@@ -1,0 +1,1422 @@
+# P09 Power Statstics Historical Data
+#    F000     7  PVEnergyLast7day          R   0.1        kWh     %.1fkWh      Unsigned                             The power data for each day occupies one register,                                                                       PV发电量最近7天历史数据
+#    F007     7  BatChgEnergyLast7day      R   1          AH      %dAH         Unsigned                             so  for example, if today is September 27,                                                                               电池充电电量最近7天历史数据
+#    F00E     7  BatDisChgEnergyLast7day   R   1          AH      %dAH         Unsigned                             the PV power generation data for the last 7 days is as follows:                                                          电池放电电量最近7天历史数据
+#    F015     7  LineChgEnergyLast7day     R   1          AH      %dAH         Unsigned                             F000: power generation on September 26 (yesterday)                                                                       市电充电电量最近7天历史数据
+#    F01C     7  LoadConsumLast7day        R   0.1        kWh     %.1fkWh      Unsigned                             F001: power generation on September 25 (two days  ago)                                                                   负载消耗电量最近7天历史数据
+#    F023     7  LoadConsumFromLineLast7dayR   0.1        kWh     %.1fkWh      Unsigned                             F002: power generation on September 24                                                                                   负载从市电消耗电量最近7天历史数
+#    F02A     2  EnergyStatisticsDay       R   0.1        kWh     %.1fkWh      Unsigned                                                                                                                                                      据最近一天日期记录
+#    F02C     1  GeneratEnergyToGridToday  R   0.1        kWh     %.1fkWh      Unsigned                                                                                                                                                      当天并网电量
+#    F02D     1  BatChgAHToday             R   1          AH      %d           Unsigned                             Total battery charging for the day (AH)                                                                                  电池当天充电安时数
+#    F02E     1  BatDischgAHToday          R   1          AH      %d           Unsigned                             Total battery discharging for the day (AH)                                                                               电池当天放电安时数
+#    F02F     1  GeneratEnergyToday        R   0.1        kWh     %.1fkWh      Unsigned                             Total PV power generation of the day                                                                                     当天PV发电量
+#    F030     1  UsedEnergyToday           R   0.1        kWh     %.1fkWh      Unsigned                             Total load power consumption for the day                                                                                 负载当天用电量
+#    F031     1  WorkDaysTotal             R   1          d       %d           Unsigned                                                                                                                                                      总运行天数
+#    F032     2  GridEnergyTotal           R   0.1        kWh     %.1fkWh      Unsigned                             Cumulative value of power generated to the grid                                                                          累计并网电量
+#    F034     2  BatChgAHTotal             R   1          AH      %d           Unsigned                                                                                                                                                      蓄电池累计充电安时数
+#    F036     2  BatDischgAHTotal          R   1          AH      %d           Unsigned                                                                                                                                                      蓄电池累计放电安时数
+#    F038     2  GeneratEnergyTotal        R   0.1        kWh     %.1fkWh      Unsigned                                                                                                                                                      PV累计发电量
+#    F03A     2  UsedEnergyTotal           R   0.1        kWh     %.1fkWh      Unsigned                                                                                                                                                      负载累计用电量
+#    F03C     1  LineChgEnergyTday         R   1          AH      %d           Unsigned                             AC charging power (AH) for the day                                                                                       市电当天充电电量
+#    F03D     1  LoadConsumLineTday        R   0.1        kWh     %.1fkWh      Unsigned                                                                                                                                                      负载当天从市电消耗电量
+#    F03E     1  InvWorkTimeToday          R   1          min     %dmin        Unsigned                                                                                                                                                      逆变当天工作时间
+#    F03F     1  LineWorkTimeTodya         R   1          min     %dmin        Unsigned                                                                                                                                                      旁路当天工作时间
+#    F040     3  PowerOnTime               R   1                  %d           Unsigned                             Refer to the time register for the current time format.                                                                  开机时间
+#    F043     3  LastEquaChgTime           R   1                  %d           Unsigned                             Refer to the time register for the current time format.                                                                  上次均衡充电完成时间
+#    F046     2  LineChgEnergyTotal        R   1          AH      %d           Unsigned                                                                                                                                                      市电累计充电量
+#    F048     2  LoadConsumLineTotal       R   0.1        kWh     %.1fkWh      Unsigned                             Cumulative load power consumed from the battery side                                                                     负载累计从市电消耗电量
+#    F04A     1  InvWorkTimeTotal          R   1          h       %dh          Unsigned                                                                                                                                                      逆变累计工作时间
+#    F04B     1  LineWorkTimeTotal         R   1          h       %dh          Unsigned                                                                                                                                                      旁路累计工作时间
+#    F04C     1  LineChgKwHTday            R   1                  %d           Unsigned                                                                                                                                                      市电充电电量kwh
+# #  F04D     1  EnergyReserved3           R   1                  %d           Unsigned                                                                                                                                                      保留
+#    F04E     1  BatDischgkWhToday         R   0.1        kWh     %.1fkWh      Unsigned                             The energy of battery discharge today (kWh)
+#    F04F     1  EnergyReserved3           R   1                  %d           Unsigned
+#    F050     2  BatChgkWhTotal            R   0.1        kWh     %.1fkWh      Unsigned                             The energy of battery charge total (kWh)
+#    F052     2  BatDischgkWhTotal         R   0.1        kWh     %.1fkWh      Unsigned                             The energy of battery discharge total (kWh)
+#    F054     2  LineChgkWhTotal           R   0.1        kWh     %.1fkWh      Unsigned
+#    F056     1  GenLoadConsumToday        R   0.1        kWh     %.1f         Unsigned                             The amount of electricity consumed by the generator with load today
+#    F057     1  GenChgkWhToday            R   0.1        kWh     %.1f         Unsigned                             The amount of electricity consumed by the generator charging today
+#    F058     2  GenLoadConsumTotal        R   0.1        kWh     %.1f         Unsigned                             The amount of electricity consumed by the generator with load total
+#    F05A     2  GenChgkWhTotal            R   0.1        kWh     %.1f         Unsigned                             The amount of electricity consumed by the generator charging total
+#    F05C     1  GenWorkTimeToday          R   1          h       %d           Unsigned                             Generator working hours of the day
+#    F05D     1  GenWorkTimeTotal          R   1          h       %d           Unsigned                             Cumulative working time of generator
+#    F05E     1  HomdLoadConsumTday        R   0.1        kWh     %.1fkWh      Unsigned
+#    F05F     1  EnergyReserved4           R   0.1        kWh     %.1fkWh      Unsigned
+#    F060     2  HomdLoadConsumTotal       R   0.1        kWh     %.1fkWh      Unsigned
+
+sensor:
+# P09 Power Statstics Historical Data
+#    F000     7  PVEnergyLast7day          R   0.1        kWh     %.1fkWh      Unsigned                             The power data for each day occupies one register,
+                                                                                               #                    so  for example, if today is September 27,
+                                                                                               #                    the PV power generation data for the last 7 days is as follows:
+                                                                                               #                    F000: power generation on September 26 (yesterday)
+                                                                                               #                    F001: power generation on September 25 (two days  ago)
+                                                                                               #                    F002: power generation on September 24
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: PVEnergyLast7day1
+    name: "${name} PVEnergyLast7day1"
+    address: 0xF000
+    force_new_range: true
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 7 
+    # response_size: 14
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: PVEnergyLast7day2
+    name: "${name} PVEnergyLast7day2"
+    address: 0xF001
+    # address: 0xF000
+    # offset: 0x01
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: PVEnergyLast7day3
+    name: "${name} PVEnergyLast7day3"
+    address: 0xF002
+    # address: 0xF000
+    # offset: 0x02
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: PVEnergyLast7day4
+    name: "${name} PVEnergyLast7day4"
+    address: 0xF003
+    # address: 0xF000
+    # offset: 0x03
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: PVEnergyLast7day5
+    name: "${name} PVEnergyLast7day5"
+    address: 0xF004
+    # address: 0xF000
+    # offset: 0x04
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: PVEnergyLast7day6
+    name: "${name} PVEnergyLast7day6"
+    address: 0xF005
+    # address: 0xF000
+    # offset: 0x05
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: PVEnergyLast7day7
+    name: "${name} PVEnergyLast7day7"
+    address: 0xF006
+    # address: 0xF000
+    # offset: 0x06
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F007     7  BatChgEnergyLast7day      R   1          AH      %dAH         Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgEnergyLast7day1
+    name: "${name} BatChgEnergyLast7day1"
+    address: 0xF007
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgEnergyLast7day2
+    name: "${name} BatChgEnergyLast7day2"
+    address: 0xF008
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgEnergyLast7day3
+    name: "${name} BatChgEnergyLast7day3"
+    address: 0xF009
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgEnergyLast7day4
+    name: "${name} BatChgEnergyLast7day4"
+    address: 0xF00A
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgEnergyLast7day5
+    name: "${name} BatChgEnergyLast7day5"
+    address: 0xF00B
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgEnergyLast7day6
+    name: "${name} BatChgEnergyLast7day6"
+    address: 0xF00C
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgEnergyLast7day7
+    name: "${name} BatChgEnergyLast7day7"
+    address: 0xF00D
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+#    F00E     7  BatDisChgEnergyLast7day   R   1          AH      %dAH         Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDisChgEnergyLast7day1
+    name: "${name} BatDisChgEnergyLast7day1"
+    address: 0xF00E
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDisChgEnergyLast7day2
+    name: "${name} BatDisChgEnergyLast7day2"
+    address: 0xF00F
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDisChgEnergyLast7day3
+    name: "${name} BatDisChgEnergyLast7day3"
+    address: 0xF010
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDisChgEnergyLast7day4
+    name: "${name} BatDisChgEnergyLast7day4"
+    address: 0xF011
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDisChgEnergyLast7day5
+    name: "${name} BatDisChgEnergyLast7day5"
+    address: 0xF012
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDisChgEnergyLast7day6
+    name: "${name} BatDisChgEnergyLast7day6"
+    address: 0xF013
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDisChgEnergyLast7day7
+    name: "${name} BatDisChgEnergyLast7day7"
+    address: 0xF014
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+#    F015     7  LineChgEnergyLast7day     R   1          AH      %dAH         Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgEnergyLast7day1
+    name: "${name} LineChgEnergyLast7day1"
+    address: 0xF015
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgEnergyLast7day2
+    name: "${name} LineChgEnergyLast7day2"
+    address: 0xF016
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgEnergyLast7day3
+    name: "${name} LineChgEnergyLast7day3"
+    address: 0xF017
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgEnergyLast7day4
+    name: "${name} LineChgEnergyLast7day4"
+    address: 0xF018
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgEnergyLast7day5
+    name: "${name} LineChgEnergyLast7day5"
+    address: 0xF019
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgEnergyLast7day6
+    name: "${name} LineChgEnergyLast7day6"
+    address: 0xF01A
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgEnergyLast7day7
+    name: "${name} LineChgEnergyLast7day7"
+    address: 0xF01B
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+#    F01C     7  LoadConsumLast7day        R   0.1        kWh     %.1fkWh      Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumLast7day1
+    name: "${name} LoadConsumLast7day1"
+    address: 0xF01C
+    force_new_range: true
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 7 
+    # response_size: 14
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumLast7day2
+    name: "${name} LoadConsumLast7day2"
+    address: 0xF01D
+    # address: 0xF01C
+    # offset: 0x01
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumLast7day3
+    name: "${name} LoadConsumLast7day3"
+    address: 0xF01E
+    # address: 0xF01C
+    # offset: 0x02
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumLast7day4
+    name: "${name} LoadConsumLast7day4"
+    address: 0xF01F
+    # address: 0xF01C
+    # offset: 0x03
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumLast7day5
+    name: "${name} LoadConsumLast7day5"
+    address: 0xF020
+    # address: 0xF01C
+    # offset: 0x04
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumLast7day6
+    name: "${name} LoadConsumLast7day6"
+    address: 0xF021
+    # address: 0xF01C
+    # offset: 0x05
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumLast7day7
+    name: "${name} LoadConsumLast7day7"
+    address: 0xF022
+    # address: 0xF01C
+    # offset: 0x06
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F023     7  LoadConsumFromLineLast7dayR   0.1        kWh     %.1fkWh      Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumFromLineLast7day1
+    name: "${name} LoadConsumFromLineLast7day1"
+    address: 0xF023
+    force_new_range: true
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 7 
+    # response_size: 14
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumFromLineLast7day2
+    name: "${name} LoadConsumFromLineLast7day2"
+    address: 0xF024
+    # address: 0xF023
+    # offset: 0x01
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumFromLineLast7day3
+    name: "${name} LoadConsumFromLineLast7day3"
+    address: 0xF025
+    # address: 0xF023
+    # offset: 0x02
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumFromLineLast7day4
+    name: "${name} LoadConsumFromLineLast7day4"
+    address: 0xF026
+    # address: 0xF023
+    # offset: 0x03
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumFromLineLast7day5
+    name: "${name} LoadConsumFromLineLast7day5"
+    address: 0xF027
+    # address: 0xF023
+    # offset: 0x04
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumFromLineLast7day6
+    name: "${name} LoadConsumFromLineLast7day6"
+    address: 0xF028
+    # address: 0xF023
+    # offset: 0x05
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumFromLineLast7day7
+    name: "${name} LoadConsumFromLineLast7day7"
+    address: 0xF029
+    # address: 0xF023
+    # offset: 0x06
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F02A     2  EnergyStatisticsDay       R   0.1        kWh     %.1fkWh      Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: EnergyStatisticsDay
+    name: "${name} EnergyStatisticsDay"
+    address: 0xF02A
+    force_new_range: true
+    register_type: holding
+    value_type: U_DWORD_R
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F02C     1  GeneratEnergyToGridToday  R   0.1        kWh     %.1fkWh      Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: GeneratEnergyToGridToday
+    name: "${name} GeneratEnergyToGridToday"
+    address: 0xF02C
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F02D     1  BatChgAHToday             R   1          AH      %d           Unsigned                             Total battery charging for the day (AH)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgAHToday
+    name: "${name} BatChgAHToday"
+    address: 0xF02D
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+#    F02E     1  BatDischgAHToday          R   1          AH      %d           Unsigned                             Total battery discharging for the day (AH)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDischgAHToday
+    name: "${name} BatDischgAHToday"
+    address: 0xF02E
+    # force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+#    F02F     1  GeneratEnergyToday        R   0.1        kWh     %.1fkWh      Unsigned                             Total PV power generation of the day
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: GeneratEnergyToday
+    name: "${name} GeneratEnergyToday"
+    address: 0xF02F
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F030     1  UsedEnergyToday           R   0.1        kWh     %.1fkWh      Unsigned                             Total load power consumption for the day
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: UsedEnergyToday
+    name: "${name} UsedEnergyToday"
+    address: 0xF030
+    force_new_range: true
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F031     1  WorkDaysTotal             R   1          d       %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} WorkDaysTotal"
+    address: 0xF031
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "day"
+    # device_class: time
+    # state_class: measurement
+    # accuracy_decimals: 1
+
+#    F032     2  GridEnergyTotal           R   0.1        kWh     %.1fkWh      Unsigned                             Cumulative value of power generated to the grid
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: GridEnergyTotal
+    name: "${name} GridEnergyTotal"
+    address: 0xF032
+    register_type: holding
+    value_type: U_DWORD_R
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F034     2  BatChgAHTotal             R   1          AH      %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgAHTotal
+    name: "${name} BatChgAHTotal"
+    address: 0xF034
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_DWORD_R
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+#    F036     2  BatDischgAHTotal          R   1          AH      %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDischgAHTotal
+    name: "${name} BatDischgAHTotal"
+    address: 0xF036
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_DWORD_R
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+#    F038     2  GeneratEnergyTotal        R   0.1        kWh     %.1fkWh      Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: GeneratEnergyTotal
+    name: "${name} GeneratEnergyTotal"
+    address: 0xF038
+    register_type: holding
+    value_type: U_DWORD_R
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F03A     2  UsedEnergyTotal           R   0.1        kWh     %.1fkWh      Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: UsedEnergyTotal
+    name: "${name} UsedEnergyTotal"
+    address: 0xF03A
+    register_type: holding
+    value_type: U_DWORD_R
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F03C     1  LineChgEnergyTday         R   1          AH      %d           Unsigned                             AC charging power (AH) for the day
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgEnergyTday
+    name: "${name} LineChgEnergyTday"
+    address: 0xF03C
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_WORD
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"   
+
+#    F03D     1  LoadConsumLineTday        R   0.1        kWh     %.1fkWh      Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumLineTday
+    name: "${name} LoadConsumLineTday"
+    address: 0xF03D
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F03E     1  InvWorkTimeToday          R   1          min     %dmin        Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} InvWorkTimeToday"
+    address: 0xF03E
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "min"
+    # device_class: time
+    # state_class: measurement
+    # accuracy_decimals: 1
+
+#    F03F     1  LineWorkTimeTodya         R   1          min     %dmin        Unsigned   # doc - letters mismatch
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} LineWorkTimeToday"
+    address: 0xF03F
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "min"
+    # device_class: time
+    # state_class: measurement
+    # accuracy_decimals: 1
+
+#    F040     3  PowerOnTime               R   1                  %d           Unsigned                             Refer to the time register for the current time format.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} PowerOnTimeYear"
+    id: PowerOnTimeYear
+    address: 0xF040
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} PowerOnTimeMonth"
+    id: PowerOnTimeMonth
+    address: 0xF040
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} PowerOnTimeDay"
+    id: PowerOnTimeDay
+    address: 0xF041
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} PowerOnTimeHour"
+    id: PowerOnTimeHour
+    address: 0xF041
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} PowerOnTimeMinute"
+    id: PowerOnTimeMinute
+    address: 0xF042
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} PowerOnTimeSecond"
+    id: PowerOnTimeSecond
+    address: 0xF042
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+
+#    F043     3  LastEquaChgTime           R   1                  %d           Unsigned                             Refer to the time register for the current time format.
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} LastEquaChgTimeYear"
+    id: LastEquaChgTimeYear
+    address: 0xF043
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} LastEquaChgTimeMonth"
+    id: LastEquaChgTimeMonth
+    address: 0xF043
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} LastEquaChgTimeDay"
+    id: LastEquaChgTimeDay
+    address: 0xF044
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} LastEquaChgTimeHour"
+    id: LastEquaChgTimeHour
+    address: 0xF044
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} LastEquaChgTimeMinute"
+    id: LastEquaChgTimeMinute
+    address: 0xF045
+    bitmask: 0xFF00
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    # name: "${name} LastEquaChgTimeSecond"
+    id: LastEquaChgTimeSecond
+    address: 0xF045
+    bitmask: 0x00FF
+    register_type: holding
+    value_type: U_WORD
+
+#    F046     2  LineChgEnergyTotal        R   1          AH      %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgEnergyTotal
+    name: "${name} LineChgEnergyTotal"
+    address: 0xF046
+    force_new_range: true
+    # address: 0xF007
+    # offset: 0x00
+    # register_count: 2
+    # response_size: 4
+    register_type: holding
+    value_type: U_DWORD_R
+    skip_updates: 1 
+    accuracy_decimals: 0
+    unit_of_measurement: "Ah"                                                           # ic it correct unit ? doc mistake ? 
+
+#    F048     2  LoadConsumLineTotal       R   0.1        kWh     %.1fkWh      Unsigned                             Cumulative load power consumed from the battery side
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LoadConsumLineTotal
+    name: "${name} LoadConsumLineTotal"
+    address: 0xF048
+    register_type: holding
+    value_type: U_DWORD_R
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F04A     1  InvWorkTimeTotal          R   1          h       %dh          Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} InvWorkTimeTotal"
+    address: 0xF04A
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "h"
+    # device_class: time
+    # state_class: measurement
+    # accuracy_decimals: 1
+
+#    F04B     1  LineWorkTimeTotal         R   1          h       %dh          Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    name: "${name} LineWorkTimeTotal"
+    address: 0xF04B
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: "h"
+    # device_class: time
+    # state_class: measurement
+    # accuracy_decimals: 1
+
+#    F04C     1  LineChgKwHTday            R   1                  %d           Unsigned
+  - platform: modbus_controller                                                          # doc mistake ? units: kWh
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgKwHTday
+    name: "${name} LineChgKwHTday"
+    address: 0xF04C
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+# #  F04D     1  EnergyReserved3           R   1                  %d           Unsigned         # doc mistake - duplitated name
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: EnergyReserved2
+    name: "${name} EnergyReserved2"
+    address: 0xF04D
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F04E     1  BatDischgkWhToday         R   0.1        kWh     %.1fkWh      Unsigned                             The energy of battery discharge today (kWh)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDischgkWhToday
+    name: "${name} BatDischgkWhToday"
+    address: 0xF04E
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F04F     1  EnergyReserved3           R   1                  %d           Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: EnergyReserved3
+    name: "${name} EnergyReserved3"
+    address: 0xF04F
+    register_type: holding
+    value_type: U_WORD
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F050     2  BatChgkWhTotal            R   0.1        kWh     %.1fkWh      Unsigned                             The energy of battery charge total (kWh)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatChgkWhTotal
+    name: "${name} BatChgkWhTotal"
+    address: 0xF050
+    force_new_range: true
+    register_type: holding
+    value_type: U_DWORD_R
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F052     2  BatDischgkWhTotal         R   0.1        kWh     %.1fkWh      Unsigned                             The energy of battery discharge total (kWh)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: BatDischgkWhTotal
+    name: "${name} BatDischgkWhTotal"
+    address: 0xF052
+    # force_new_range: true
+    register_type: holding
+    value_type: U_DWORD_R
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+#    F054     2  LineChgkWhTotal           R   0.1        kWh     %.1fkWh      Unsigned
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_contr_id}
+    id: LineChgkWhTotal
+    name: "${name} LineChgkWhTotal"
+    address: 0xF054
+    # force_new_range: true
+    register_type: holding
+    value_type: U_DWORD_R
+    # register_count: 1 
+    # response_size: 2
+    # skip_updates: 1 
+    accuracy_decimals: 1
+    unit_of_measurement: "kWh"
+    filters:
+      - multiply: 0.1   
+
+# #    F056     1  GenLoadConsumToday        R   0.1        kWh     %.1f         Unsigned                             The amount of electricity consumed by the generator with load today
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     id: GenLoadConsumToday
+#     name: "${name} GenLoadConsumToday"
+#     address: 0xF056
+#     # force_new_range: true
+#     register_type: holding
+#     value_type: U_WORD
+#     # register_count: 1 
+#     # response_size: 2
+#     # skip_updates: 1 
+#     accuracy_decimals: 1
+#     unit_of_measurement: "kWh"
+#     filters:
+#       - multiply: 0.1   
+# 
+# #    F057     1  GenChgkWhToday            R   0.1        kWh     %.1f         Unsigned                             The amount of electricity consumed by the generator charging today
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     id: GenChgkWhToday
+#     name: "${name} GenChgkWhToday"
+#     address: 0xF057
+#     # force_new_range: true
+#     register_type: holding
+#     value_type: U_WORD
+#     # register_count: 1 
+#     # response_size: 2
+#     # skip_updates: 1 
+#     accuracy_decimals: 1
+#     unit_of_measurement: "kWh"
+#     filters:
+#       - multiply: 0.1   
+# 
+# #    F058     2  GenLoadConsumTotal        R   0.1        kWh     %.1f         Unsigned                             The amount of electricity consumed by the generator with load total
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     id: GenLoadConsumTotal
+#     name: "${name} GenLoadConsumTotal"
+#     address: 0xF058
+#     # force_new_range: true
+#     register_type: holding
+#     value_type: U_DWORD_R
+#     # register_count: 1 
+#     # response_size: 2
+#     # skip_updates: 1 
+#     accuracy_decimals: 1
+#     unit_of_measurement: "kWh"
+#     filters:
+#       - multiply: 0.1   
+# 
+# #    F05A     2  GenChgkWhTotal            R   0.1        kWh     %.1f         Unsigned                             The amount of electricity consumed by the generator charging total
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     id: GenChgkWhTotal
+#     name: "${name} GenChgkWhTotal"
+#     address: 0xF05A
+#     # force_new_range: true
+#     register_type: holding
+#     value_type: U_DWORD_R
+#     # register_count: 1 
+#     # response_size: 2
+#     # skip_updates: 1 
+#     accuracy_decimals: 1
+#     unit_of_measurement: "kWh"
+#     filters:
+#       - multiply: 0.1   
+# 
+# #    F05C     1  GenWorkTimeToday          R   1          h       %d           Unsigned                             Generator working hours of the day
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     name: "${name} GenWorkTimeToday"
+#     address: 0xF05C
+#     register_type: holding
+#     value_type: U_WORD
+#     unit_of_measurement: "h"
+#     # device_class: time
+#     # state_class: measurement
+#     # accuracy_decimals: 1
+# 
+# #    F05D     1  GenWorkTimeTotal          R   1          h       %d           Unsigned                             Cumulative working time of generator
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     name: "${name} GenWorkTimeToday"
+#     address: 0xF05D
+#     register_type: holding
+#     value_type: U_WORD
+#     unit_of_measurement: "h"
+#     # device_class: time
+#     # state_class: measurement
+#     # accuracy_decimals: 1
+# 
+# #    F05E     1  HomdLoadConsumTday        R   0.1        kWh     %.1fkWh      Unsigned
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     id: HomdLoadConsumTday
+#     name: "${name} HomdLoadConsumTday"
+#     address: 0xF05E
+#     register_type: holding
+#     value_type: U_WORD
+#     # register_count: 1 
+#     # response_size: 2
+#     # skip_updates: 1 
+#     accuracy_decimals: 1
+#     unit_of_measurement: "kWh"
+#     filters:
+#       - multiply: 0.1   
+# 
+# #    F05F     1  EnergyReserved4           R   0.1        kWh     %.1fkWh      Unsigned
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     id: EnergyReserved4
+#     name: "${name} EnergyReserved4"
+#     address: 0xF05F
+#     register_type: holding
+#     value_type: U_WORD
+#     # register_count: 1 
+#     # response_size: 2
+#     # skip_updates: 1 
+#     accuracy_decimals: 1
+#     unit_of_measurement: "kWh"
+#     filters:
+#       - multiply: 0.1   
+# 
+# #    F060     2  HomdLoadConsumTotal       R   0.1        kWh     %.1fkWh      Unsigned
+#   - platform: modbus_controller
+#     modbus_controller_id: ${modbus_contr_id}
+#     id: HomdLoadConsumTotal
+#     name: "${name} HomdLoadConsumTotal"
+#     address: 0xF060
+#     register_type: holding
+#     value_type: U_DWORD_R
+#     # register_count: 1 
+#     # response_size: 2
+#     # skip_updates: 1 
+#     accuracy_decimals: 1
+#     unit_of_measurement: "kWh"
+#     filters:
+#       - multiply: 0.1   
+# 

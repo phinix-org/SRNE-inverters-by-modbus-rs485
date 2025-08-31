@@ -1,0 +1,129 @@
+substitutions:
+  name: SRNE
+  modbus_contr_id: srne
+  modbus_contr_addr: '0x01'
+  device_description: "SRNE Inverter via Modbus RS485 XIAO-ESP32-S3"
+
+esphome:
+  name: x32s3-485
+  friendly_name: X32S3-485
+  # name: xiao-esp32-s3
+  # friendly_name: XIAO-ESP32-S3
+  platformio_options:
+    build_flags: -DBOARD_HAS_PSRAM
+    board_build.arduino.memory_type: qio_opi
+    board_build.f_flash: 80000000L
+    board_build.flash_mode: qio 
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    # type: esp-idf
+    type: arduino
+
+# Enable logging
+logger:
+  # level: INFO
+  level: DEBUG
+  # level: VERY_VERBOSE
+  # level: DEBUG #VERBOSE #DEBUG #INFO #VERY_VERBOSE #VERBOSE #DEBUG #INFO #DEBUG
+  tx_buffer_size: 1024
+  logs:
+    uart.component: INFO
+    # uart.component: DEBUG
+    # binary_sensor: WARN
+    # sensor: WARN
+    # switch: WARN
+    # text_sensor: WARN
+    # number: WARN
+    binary_sensor: INFO
+    sensor: INFO
+    switch: INFO
+    text_sensor: INFO
+    number: INFO
+    select: INFO
+    wifi: DEBUG
+    modbus_controller: INFO
+    modbus: INFO
+    modbus.binary_sensor: INFO
+    modbus.sensor: INFO
+    modbus.switch: INFO
+    modbus.text_sensor: INFO
+    modbus.number: INFO
+    modbus_controller.binary_sensor: INFO
+    modbus_controller.sensor: INFO
+    modbus_controller.switch: INFO
+    modbus_controller.text_sensor: INFO
+    modbus_controller.number: INFO
+    modbus_controller.select: INFO
+#
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "Your_generated_secret_Api_key="
+
+ota:
+  - platform: esphome
+    password: "Your_ota_password"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "X32S3-485 Fallback Hotspot"
+    password: "Your_ap_password"
+
+captive_portal:
+
+# Pin setup is configured for XIAO RS485 Breakout Board for XIAO ESP-32-S3 Module
+
+uart:
+  id: mod_uart
+  tx_pin: GPIO5
+  rx_pin: GPIO6
+  baud_rate: 9600
+  stop_bits: 1
+  parity: NONE
+  data_bits: 8
+  rx_buffer_size: 1536
+  # debug:
+  #   direction: BOTH
+  #   dummy_receiver: false
+#    after:
+#      delimiter: "\n"
+#    sequence:
+#      - lambda: UARTDebug::log_string(direction, bytes);
+#      - lambda: UARTDebug::log_hex(direction, bytes);
+
+modbus:
+  flow_control_pin: GPIO3
+  id: modbus1
+  uart_id: mod_uart
+
+modbus_controller:
+  - id: ${modbus_contr_id}
+    address: ${modbus_contr_addr}
+    modbus_id: modbus1
+    setup_priority: -10
+    # update_interval: 20s    # too short
+    update_interval: 22s
+    command_throttle: 200ms
+
+packages:
+  P00-ProductInfo: !include_dir_merge_named ./SRNE/include/full/P00-ProductInfo/
+  P01-DC-Data: !include_dir_merge_named ./SRNE/include/full/P01-DC-Data/
+  P02-InverterData: !include_dir_merge_named ./SRNE/include/full/P02-InverterData/
+  # P03-DeviceControl: !include_dir_merge_named ./SRNE/include/full/P03-DeviceControl/
+  # # P05-SettingBattery-related: !include_dir_merge_named ./SRNE/include/test/P05-SettingBattery-related
+  P05-SettingBattery-related: !include_dir_merge_named ./SRNE/include/full/P05-SettingBattery-related
+  P07-SettingInverter-User: !include_dir_merge_named ./SRNE/include/full/P07-SettingInverter-User
+  P08-SettingInverter-Grid: !include_dir_merge_named ./SRNE/include/full/P08-SettingInverter-Grid
+  P09-PowerStatstics: !include_dir_merge_named ./SRNE/include/full/P09-PowerStatstics
+  P10-FaultRecord: !include_dir_merge_named ./SRNE/include/full/P10-FaultRecord
+
+  wifi-info: !include_dir_merge_named ./wifi/include/full/
+  uptime: !include ./wifi/include/modules/uptime.yaml
+  debug: !include ./wifi/include/modules/debug.yaml
