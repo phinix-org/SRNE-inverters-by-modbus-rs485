@@ -1,0 +1,29 @@
+time:
+  - platform: homeassistant
+#     id: homeassistant_time
+
+sensor:
+  - platform: uptime
+    type: seconds
+    id: UptimeSensor
+    name: Uptime Sensor
+    entity_category: "diagnostic"
+    update_interval: 20s
+
+  - platform: uptime
+    type: timestamp
+    id: LastBoot
+    name: Last boot
+    entity_category: "diagnostic"
+
+text_sensor:
+  - platform: uptime
+    name: Uptime
+    update_interval: 20s
+    # format:
+    #   expand: true
+    #   separator: ":"
+    #   days: ""
+    #   hours: ""
+    #   minutes: ""
+    #   seconds: ""
