@@ -98,6 +98,12 @@ You can do it, only if you exactly understand, whats are you doing.
 
 Probably some registers have wrong defined units. For example reg. `0xE041` to `0xE046` has described `W` as units, butformat is defined as `%.1fV`
 
+#### Other
+
+Hardware and Software versions should be verified. 
+
+`EnergyStatisticsDay` should be understand better.
+
 ## **Licence**
 
 |[![](images/ASF_Logo.svg)](https://www.apache.org/licenses/LICENSE-2.0)|
@@ -115,4 +121,3 @@ Probably some registers have wrong defined units. For example reg. `0xE041` to `
 
 * <https://wiki.seeedstudio.com/>
 
-#### Potentially wromg magnification
