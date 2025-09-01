@@ -8,7 +8,7 @@ ESPhome integration to Home Assistant for SRNE Inverters via Modbus-RTU RS485 co
 
 | | |
 |-|-|
-|![ ](images/wifi_port_.jpg)|![ ](images/RJ45pinout.jpg)|
+|![ ](images/wifi_port_.jpg)| ![](images/RJ45pinout.jpg) |
 
 
 |       |        |
