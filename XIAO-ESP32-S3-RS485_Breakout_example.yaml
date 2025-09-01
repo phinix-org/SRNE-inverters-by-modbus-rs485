@@ -113,17 +113,18 @@ modbus_controller:
     command_throttle: 200ms
 
 packages:
-  P00-ProductInfo: !include_dir_merge_named ./SRNE/include/full/P00-ProductInfo/
-  P01-DC-Data: !include_dir_merge_named ./SRNE/include/full/P01-DC-Data/
-  P02-InverterData: !include_dir_merge_named ./SRNE/include/full/P02-InverterData/
+  P00-ProductInfo: !include_dir_merge_named ./include/full/P00-ProductInfo/
+  P01-DC-Data: !include_dir_merge_named ./include/full/P01-DC-Data/
+  P02-InverterData: !include_dir_merge_named ./include/full/P02-InverterData/
   # P03-DeviceControl: !include_dir_merge_named ./SRNE/include/full/P03-DeviceControl/
   # # P05-SettingBattery-related: !include_dir_merge_named ./SRNE/include/test/P05-SettingBattery-related
-  P05-SettingBattery-related: !include_dir_merge_named ./SRNE/include/full/P05-SettingBattery-related
-  P07-SettingInverter-User: !include_dir_merge_named ./SRNE/include/full/P07-SettingInverter-User
-  P08-SettingInverter-Grid: !include_dir_merge_named ./SRNE/include/full/P08-SettingInverter-Grid
-  P09-PowerStatstics: !include_dir_merge_named ./SRNE/include/full/P09-PowerStatstics
-  P10-FaultRecord: !include_dir_merge_named ./SRNE/include/full/P10-FaultRecord
+  P05-SettingBattery-related: !include_dir_merge_named ./include/full/P05-SettingBattery-related
+  P07-SettingInverter-User: !include_dir_merge_named ./include/full/P07-SettingInverter-User
+  P08-SettingInverter-Grid: !include_dir_merge_named ./include/full/P08-SettingInverter-Grid
+  P09-PowerStatstics: !include_dir_merge_named ./include/full/P09-PowerStatstics
+  P10-FaultRecord: !include_dir_merge_named ./include/full/P10-FaultRecord
 
-  wifi-info: !include_dir_merge_named ./wifi/include/full/
-  uptime: !include ./wifi/include/modules/uptime.yaml
-  debug: !include ./wifi/include/modules/debug.yaml
+  # ESP Diagnostic info
+  Diagnostic: !include_dir_merge_named ./include/full/Diagnostic
+  # uptime: !include ./wifi/include/modules/uptime.yaml
+  # debug: !include ./wifi/include/modules/debug.yaml
