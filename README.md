@@ -1,9 +1,15 @@
 # SRNE Inverters by Modbus RS485
 
+## Description
 
+ESPhome integration to Home Assistant for SRNE Inverters via Modbus-RTU RS485 connection
 
 ## Connection and wiring
-![ ](images/wifi_port_.jpg)
+
+| | |
+|-|-|
+|![ ](images/wifi_port_.jpg)|![ ](images/RJ45pinout.jpg)|
+
 
 |       |        |
 |:-----:|:------:|
@@ -44,6 +50,14 @@ For example, on Lilygo T-CAN485 ESP32 test was negative.
 
 Seed Studio XIAO-ESP32-S3 with RS485 Breakout Board was used with positive results.
 
+
+| XIAO-ESP32-S3 Board | Seeed Studio XIAO RS485-Expansion-Board |
+|---|---|
+|![](https://camo.githubusercontent.com/013aa37d2d62b45d8145409b2ffda2ab64a50f7bc7443aff66ad74274bd8fa26/68747470733a2f2f66696c65732e736565656473747564696f2e636f6d2f77696b692f7869616f5f746f706963706167652f657370333273332e6a7067)|![](https://files.seeedstudio.com/wiki/rs485_ExpansionBoard/hadware.jpg)|
+| https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/ | https://wiki.seeedstudio.com/XIAO-RS485-Expansion-Board/|
+
+Other, sufficient hardware can be used
+
 ## Important warnings
 
 During installation the following message is generated:
@@ -57,6 +71,9 @@ GPIO3 Pin is used by RS485 Breakout Board.
 No any trouble is observed.
 
 ## To Do
+
+* testing
+* nice cards for API
 
 ### Detail interpretation of Fault History Records
 
@@ -79,6 +96,8 @@ You can do it, only if you exactly understand, whats are you doing.
 
 #### Potentially wrong units
 
+Probably some registers have wrong defined units. For example reg. `0xE041` to `0xE046` has described `W` as units, butformat is defined as `%.1fV`
+
 ## **Licence**
 
 |[![](images/ASF_Logo.svg)](https://www.apache.org/licenses/LICENSE-2.0)|
@@ -89,5 +108,11 @@ You can do it, only if you exactly understand, whats are you doing.
 
 * <https://gitlab.stn.pl/picoides-monitor/inverters/srne-inverters-by-modbus-rs485/>
 
+|![](https://solutionenergystorage.pl/wp-content/uploads/2024/04/logo-new.png.avif) |
+|-|
+| []<https://solutionenergystorage.pl/> |
+| Thanks for providing the inverter for testing |
+
+* <https://wiki.seeedstudio.com/>
 
 #### Potentially wromg magnification
