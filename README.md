@@ -36,7 +36,7 @@ To prevent modbus communication errors as the result of automatic optimization `
 
 ## Protocol version and documentation
 
-Integration is made on the base of SRNE Solar MODBUS Protocol for Energy Storage Inverter V2.04, 2024.12.05.
+Integration is made on the base of SRNE Solar MODBUS Protocol for Energy Storage Inverter V2.08, 2025.05.26.
 
 Several registers are uavailable / untested due to firmware version of available inverter.
 
