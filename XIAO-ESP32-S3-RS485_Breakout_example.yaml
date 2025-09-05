@@ -125,6 +125,7 @@ packages:
   P10-FaultRecord: !include_dir_merge_named ./include/full/P10-FaultRecord
 
   # ESP Diagnostic info
-  Diagnostic: !include_dir_merge_named ./include/full/Diagnostic
-  # uptime: !include ./wifi/include/modules/uptime.yaml
-  # debug: !include ./wifi/include/modules/debug.yaml
+  # Diagnostic: !include_dir_merge_named ./include/full/Diagnostic # it's not working correctly because of repeated sensor and text_sensor section
+  uptime: !include ./include/modules/Diagnostic/uptime.yaml
+  debug: !include ./include/modules/Diagnostic/debug.yaml
+  wifi-info: !include ./include/modules/Diagnostic/wifi-info.yaml
